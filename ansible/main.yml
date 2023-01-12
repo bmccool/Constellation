@@ -67,46 +67,11 @@
       ansible.builtin.command: hostname -s
       register: hostname_result
 
-    - name: Setup Static Pod Yaml for Kube-VIP
-      # dump files/kube-vip.yaml into /etc/kubernetes/manifests/kube-vip.yaml
-      block:
-      - name: Ensure Manifests Directory Exists
-        ansible.builtin.file:
-          path: /etc/kubernetes/manifests
-          state: directory
-          mode: '0755'
-      - name: Get Kube-VIP Version
-        ansible.builtin.shell: curl -sL https://api.github.com/repos/kube-vip/kube-vip/releases | jq -r ".[0].name"
-        register: kube_vip_version
-      - name: Generate Static Pod Manifest for Kube-Vip
-        #ansible.builtin.shell: "sudo ctr image pull ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }}; sudo ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }} vip /kube-vip manifest pod --interface eth0 --address {{ controlplane_endpoint_ipaddress }} --controlplane --arp --leaderElection | sudo tee /etc/kubernetes/manifests/kube-vip.yaml"
-        ansible.builtin.shell: "sudo ctr image pull ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }}; sudo ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }} vip /kube-vip manifest pod --interface eth0 --address {{ controlplane_endpoint_ipaddress }} --controlplane --arp --leaderElection | sudo tee /etc/kubernetes/manifests/kube-vip.yaml"
-        # sudo ctr image pull ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }}; 
-        # sudo ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }} vip 
-        #   /kube-vip manifest pod --interface eth0 --address {{ controlplane_endpoint_ipaddress }} --controlplane --arp --leaderElection | sudo tee /etc/kubernetes/manifests/kube-vip.yaml"
 
-          # export VIP=192.168.11.3    {{ controlplane_endpoint_ipaddress  }}
-          # export INTERFACE=eth0
-          # sudo apt install jq
-          # KVVERSION=$(curl -sL https://api.github.com/repos/kube-vip/kube-vip/releases | jq -r ".[0].name")
-          # alias kube-vip="sudo ctr image pull ghcr.io/kube-vip/kube-vip:$KVVERSION; sudo ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:$KVVERSION vip /kube-vip"
-          # kube-vip manifest pod --interface $INTERFACE --address $VIP --controlplane --arp --leaderElection | sudo tee /etc/kubernetes/manifests/kube-vip.yaml
-
-    - name: Copy Generated kube-vip manifest to localhost
-      ansible.builtin.fetch:
-        src: /etc/kubernetes/manifests/kube-vip.yaml
-        dest: files/kube-vip.yaml
-        flat: yes
-
-    # TODO ok, this is weird, but it might work.  Maybe a timer too?
-    # Otherwise, we may need to implement a retry mechanism ala kubeadm reset, delete cni... actually lets do that anyway
-    - name: Copy Generated Kube-VIP manifest to Controller Node
-      copy: src=files/kube-vip.yaml dest=/etc/kubernetes/manifests/kube-vip.yaml mode=0777
-
-    - name: Delete cni folder
-      ansible.builtin.file:
-        path: /etc/cni/net.d
-        state: absent
+    #- name: Delete cni folder
+    #  ansible.builtin.file:
+    #    path: /etc/cni/net.d
+    #    state: absent
 
     - name: Generate Certificate Key
       ansible.builtin.command: kubeadm certs certificate-key
@@ -134,26 +99,6 @@
       environment:
         IPADDR: "{{ ip_result.stdout }}"
         NODENAME: "{{ hostname_result.stdout }}"
-      ignore_errors: yes
-      register: init_result
-
-    - name: Retry Init
-      when: init_result.rc != 0
-      block:
-      - name: Reset Kubeadm
-        ansible.builtin.command: sudo yes | sudo kubeadm reset
-
-      - name: Delete CNI Folder
-        ansible.builtin.command: sudo rm /etc/cni/net.d -rf
-
-      - name: Copy Generated Kube-VIP manifest to Controller Node
-        copy: src=files/kube-vip.yaml dest=/etc/kubernetes/manifests/kube-vip.yaml mode=0777
-
-      - name: ReInitialize K8s CLuster
-        ansible.builtin.command: sudo kubeadm init --v=6 --control-plane-endpoint {{ controlplane_endpoint_ipaddress }} --apiserver-cert-extra-sans={{ controlplane_endpoint_ipaddress }} --pod-network-cidr=10.244.0.0/16 --node-name=$NODENAME --upload-certs --certificate-key {{ certkey.stdout }}
-        environment:
-          IPADDR: "{{ ip_result.stdout }}"
-          NODENAME: "{{ hostname_result.stdout }}"
 
     - name: Setup kubeconfig for user
       command: "{{ item }}"

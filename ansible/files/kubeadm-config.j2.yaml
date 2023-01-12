@@ -3,19 +3,15 @@ kind: ClusterConfiguration
 apiVersion: kubeadm.k8s.io/v1beta3
 kubernetesVersion: 1.25.0
 #TODO
-clusterName: kubernetes
-# controlPlaneEndpoint can be ip address or dns subdomain, both with optional TCP port, if not specified advertiseAddress + bindport are used
-#TODO
-controlPlaneEndpoint: "{{ controlplane_endpoint_ipaddress }}"
+clusterName: "{{ cluster_friendly_name }}"
 apiServer:
   #timeoutForControlPlane: 4m0s
-  #TODO
   certSANs: 
-    - "{{ controlplane_endpoint_ipaddress }}"
+    - "{{ ip_result.stdout }}"
 networking:
   dnsDomain: cluster.local
   #serviceSubnet: 10.244.0.0/16
-  podSubnet: 10.244.0.0/16
+  podSubnet: "{{ pod_network_cidr }}"
 ---
 kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
@@ -24,11 +20,12 @@ cgroupDriver: "systemd"
 ---
 kind: InitConfiguration
 apiVersion: kubeadm.k8s.io/v1beta3
-#TODO
-certificateKey: "{{ certkey.stdout }}"
 nodeRegistration:
   #criSocket: unix:///var/run/containerd/containerd.sock
   imagePullPolicy: IfNotPresent
   #TODO
-  name: gemini-ctrl-1
+  name: "{{ hostname_result.stdout }}"
   #taints: null
+  localAPIEndpoint:
+    advertiseAddress: "{{ ip_result.stdout }}"
+    bindPort: 6443
