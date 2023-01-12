@@ -1,0 +1,16 @@
+---
+- name: Download Cloud Init Image
+  include_tasks: download_cloud_init.yml
+
+# BAM: Is this needed?  Right now, it's just downloading to the files directory of this role
+#- name: Upload image to ISO store
+#  include_tasks: upload_cloud_init_iso.yml
+
+- name: Create Cloud Init Image
+  include_tasks: create_cloud_init_image.yml
+
+- name: Configure Cloud Init Image
+  include_tasks: config_cloud_init_image.yml
+
+- name: Template Cloud Init Image
+  include_tasks: template_cloud_init_image.yml

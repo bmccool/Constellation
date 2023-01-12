@@ -1,0 +1,38 @@
+---
+- name: Check VM Status
+  become: yes
+  block:
+  - name: Check  Status
+    ansible.builtin.command: "sudo /usr/sbin/qm status {{ vmid }}"
+    ignore_errors: yes
+    register: status_result
+
+- name: Create CloudInitVM
+  become: yes
+  block:
+  - name: Unlock VM
+    ansible.builtin.command: "sudo /usr/sbin/qm unlock {{ vmid }}"
+    ignore_errors: yes
+    when: status_result.rc == 0
+
+  - name: Delete Old VM
+    ansible.builtin.shell: "sudo /usr/sbin/qm destroy {{ vmid }}"
+    when: status_result.rc == 0
+
+  - name: Create VM
+    ansible.builtin.command: "sudo /usr/sbin/qm create {{ vmid }} --memory 2048 --core 2 --name ubuntu-cloud --net0 virtio,bridge=vmbr0"
+
+  - name: Import the CloudInit DiskImage
+    ansible.builtin.command: "sudo /usr/sbin/qm importdisk {{ vmid }} {{ target_dir }}/{{ release_name }}-server-cloudimg-{{ iso_arch }}.img local-lvm"
+
+  - name: Attach the disk to VM via scsi
+    ansible.builtin.command: "sudo /usr/sbin/qm set {{ vmid }} --scsihw virtio-scsi-pci --scsi0 local-lvm:vm-{{ vmid }}-disk-0"
+
+  - name: Add Cloud Init CD Drive
+    ansible.builtin.command: "sudo /usr/sbin/qm set {{ vmid }} --ide2 local-lvm:cloudinit"
+
+  - name: Setup Boot from SCSI drive
+    ansible.builtin.command: "sudo /usr/sbin/qm set {{ vmid }} --boot c --bootdisk scsi0"
+
+  - name: Add Serial Console
+    ansible.builtin.command: "sudo /usr/sbin/qm set {{ vmid }} --serial0 socket --vga serial0"

@@ -1,0 +1,22 @@
+---
+- name: Setup kubeconfig for user
+  command: "{{ item }}"
+  with_items:
+    - mkdir -p {{ target_dir }}
+
+- name: Download the SHA256 sums
+  get_url:
+    url: "https://cloud-images.ubuntu.com/{{ release_name }}/current/SHA256SUMS"
+    dest: "{{ target_dir }}"
+
+- name: Get the SHA256 sum for the {{ iso_arch }} Image
+  shell:
+    cmd: "grep {{ iso_arch }}.img {{ target_dir }}/SHA256SUMS | cut -d ' ' -f1"
+  changed_when: false
+  register: sha256sum
+
+- name: Download the latest {{ release_name }} Ubuntu Server {{ iso_arch }} Image
+  get_url:
+    url: "https://cloud-images.ubuntu.com/{{ release_name }}/current/{{release_name }}-server-cloudimg-{{ iso_arch }}.img"
+    dest: "{{ target_dir }}/{{ release_name }}-server-cloudimg-{{ iso_arch }}.img"
+    checksum: "sha256:{{ sha256sum.stdout }}"

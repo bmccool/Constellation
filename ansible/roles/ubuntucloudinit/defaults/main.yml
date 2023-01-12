@@ -1,0 +1,29 @@
+---
+locale: "en-us.UTF-8"
+
+iso_arch: "amd64"
+# Valid values are: amd64, arm64
+# ppc64el and s390x haven't been tested yet
+release_name: "kinetic"
+
+keyboard_layout: "us"
+
+hostname: "kinetic-autoinstall"
+
+password: "ubuntu"
+
+username: "ubuntu"
+
+ssh_public_key: ""
+
+target_dir: "/home/ansible/ubuntucloudinit"
+
+ubuntu_gpg_key: 843938DF228D22F7B3742BC0D94AA3F0EFE21092
+
+enable_pikvm: false
+
+enable_hwe_kernel: false
+
+enable_swap_file: false
+
+vmid: 9001

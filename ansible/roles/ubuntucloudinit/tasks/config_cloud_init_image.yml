@@ -1,0 +1,66 @@
+---
+- name: Get SSH Key
+  delegate_to: localhost
+  become: no
+  block:
+  - name: Ensure SSH Directory Exists
+    ansible.builtin.file:
+      path: ~/.ssh
+      state: directory
+      mode: '0755'
+
+  - name: Check for existing SSH keys
+    ansible.builtin.stat:
+      path: ~/.ssh/id_rsa 
+    register: ssh_result
+
+  - name: Generate SSH Keys
+    when: ssh_result.stat == false
+    community.crypto.openssh_keypair:
+      path: ~/.ssh/id_rsa 
+
+  - name: Get public SSH Key
+    ansible.builtin.command: cat ~/.ssh/id_rsa.pub
+    register: ssh_keys
+
+  - name: Debug SSH Key
+    debug:
+      msg: "{{ ssh_keys.stdout }}"
+
+- name: Copy SSH Key to Host
+  become: yes
+  block:
+  - name: Ensure SSH Directory Exists
+    ansible.builtin.file:
+      path: ~/.ssh
+      state: directory
+      mode: '0755'
+  - name: Dump SSH key to file
+    ansible.builtin.copy:
+      dest: ~/.ssh/gemini.rsa.pub
+      content: "{{ ssh_keys.stdout }}"
+
+- name: Configure Cloud Init Options
+  become: yes
+  ansible.builtin.command:
+    argv:
+      - sudo
+      - /usr/sbin/qm
+      - set
+      - "{{ vmid }}"
+      - --ciuser
+      - gemini
+      - --cipassword
+      - gemini
+      - --ipconfig0
+      - ip=dhcp
+      - --nameserver
+      # - 192.168.8.1
+      # TODO Remove comment once confirmed working
+      - "{{ nameserver }}"
+      - --searchdomain
+      # - brendonmccool.com
+      # TODO Remove comment once confirmed working
+      - "{{ searchdomain }}"
+      - --sshkeys
+      - ~/.ssh/gemini.rsa.pub

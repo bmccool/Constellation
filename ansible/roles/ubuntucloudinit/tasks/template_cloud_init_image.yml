@@ -1,0 +1,11 @@
+---
+- name: Create Template Image
+  become: yes
+  ansible.builtin.command: "sudo /usr/sbin/qm template {{ vmid }}"
+  register: template_result
+  changed_when: "'convert a template to a template' not in template_result.stderr"
+  failed_when: 
+    - "'convert a template to a template' not in template_result.stderr"
+    - template_result.rc != 0
+  
+

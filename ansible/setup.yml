@@ -1,0 +1,39 @@
+---
+# Proxmox SSH Setup
+- hosts: localhost
+  become: no
+
+  vars_prompt:
+    - name: friendlyname
+      prompt: What name is used to specify PVE node?
+      private: false
+
+    - name: username
+      prompt: What username is used to SSH to PVE node?
+      private: false
+
+    - name: hostname
+      prompt: What hostname or ip address is used to SSH to PVE node?
+      private: false
+
+  tasks:
+    - name: Delete Config File
+      ansible.builtin.file:
+        path: ~/.ssh/config
+        state: absent
+
+    - name: Create Config File
+      ansible.builtin.file:
+        path: ~/.ssh/config
+        state: touch
+
+    - name: Copy Config File
+      ansible.builtin.copy:
+        dest: "~/.ssh/config"
+        content: |
+          Host {{ friendlyname }}
+              User {{ username }}
+              HostName {{ hostname }}
+
+    - name: Copy Keys
+      ansible.builtin.command: ssh-copy-id {{ username }}@{{ hostname }}
