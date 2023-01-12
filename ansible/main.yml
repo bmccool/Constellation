@@ -1,0 +1,374 @@
+---
+#
+# Tasks and roles for all hosts
+#
+#- hosts: t
+#  gather_facts: no
+#
+#  pre_tasks:
+#      - import_tasks: tasks/ssh_juggle_port.yml
+#        tags:
+#            - port
+#
+
+# Proxmox Initialization
+- hosts: gauss-pve
+  #connection: local
+  become: yes
+  #become_user: ansible
+
+  roles:
+      - role: ubuntucloudinit
+      - role: taurushardware
+
+  tasks:
+      - include: roles/installk8s/tasks/install_k8s_binaries.yml
+        become_user: root 
+      - name: Wait 60s after VM Creation 
+        ansible.builtin.wait_for:
+          timeout: 60
+      - name: Done With VM Creation
+        debug:
+          msg: "Hooray!"
+
+
+# Verify all newly created VMs are accessoble by SSH
+- hosts: controllers:workers
+  become: yes
+  remote_user: gemini
+  tasks:
+    - name: Verify SSH access
+      ansible.builtin.command: "whoami"
+      register: whoami_result
+      retries: 3
+      delay: 10
+    - name: Show SSH access
+      debug:
+        msg: "{{ whoami_result.stdout }}"
+
+
+# gemini Node Setup
+- hosts: controllers:workers
+  become: yes
+  remote_user: gemini
+  roles:
+      - role: installk8s
+
+# Master Node Specific Setup
+- hosts: maincontroller
+  become: yes
+  remote_user: gemini
+  tasks:
+    - name: Get IP Address
+      ansible.builtin.shell: "ip address show eth0 | grep 'inet ' | awk '{ print $2 }' | cut -d '/' -f1"
+      register: ip_result
+
+    - name: Get Hostname
+      ansible.builtin.command: hostname -s
+      register: hostname_result
+
+    - name: Setup Static Pod Yaml for Kube-VIP
+      # dump files/kube-vip.yaml into /etc/kubernetes/manifests/kube-vip.yaml
+      block:
+      - name: Ensure Manifests Directory Exists
+        ansible.builtin.file:
+          path: /etc/kubernetes/manifests
+          state: directory
+          mode: '0755'
+      - name: Get Kube-VIP Version
+        ansible.builtin.shell: curl -sL https://api.github.com/repos/kube-vip/kube-vip/releases | jq -r ".[0].name"
+        register: kube_vip_version
+      - name: Generate Static Pod Manifest for Kube-Vip
+        #ansible.builtin.shell: "sudo ctr image pull ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }}; sudo ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }} vip /kube-vip manifest pod --interface eth0 --address {{ controlplane_endpoint_ipaddress }} --controlplane --arp --leaderElection | sudo tee /etc/kubernetes/manifests/kube-vip.yaml"
+        ansible.builtin.shell: "sudo ctr image pull ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }}; sudo ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }} vip /kube-vip manifest pod --interface eth0 --address {{ controlplane_endpoint_ipaddress }} --controlplane --arp --leaderElection | sudo tee /etc/kubernetes/manifests/kube-vip.yaml"
+        # sudo ctr image pull ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }}; 
+        # sudo ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }} vip 
+        #   /kube-vip manifest pod --interface eth0 --address {{ controlplane_endpoint_ipaddress }} --controlplane --arp --leaderElection | sudo tee /etc/kubernetes/manifests/kube-vip.yaml"
+
+          # export VIP=192.168.11.3    {{ controlplane_endpoint_ipaddress  }}
+          # export INTERFACE=eth0
+          # sudo apt install jq
+          # KVVERSION=$(curl -sL https://api.github.com/repos/kube-vip/kube-vip/releases | jq -r ".[0].name")
+          # alias kube-vip="sudo ctr image pull ghcr.io/kube-vip/kube-vip:$KVVERSION; sudo ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:$KVVERSION vip /kube-vip"
+          # kube-vip manifest pod --interface $INTERFACE --address $VIP --controlplane --arp --leaderElection | sudo tee /etc/kubernetes/manifests/kube-vip.yaml
+
+    - name: Copy Generated kube-vip manifest to localhost
+      ansible.builtin.fetch:
+        src: /etc/kubernetes/manifests/kube-vip.yaml
+        dest: files/kube-vip.yaml
+        flat: yes
+
+    # TODO ok, this is weird, but it might work.  Maybe a timer too?
+    # Otherwise, we may need to implement a retry mechanism ala kubeadm reset, delete cni... actually lets do that anyway
+    - name: Copy Generated Kube-VIP manifest to Controller Node
+      copy: src=files/kube-vip.yaml dest=/etc/kubernetes/manifests/kube-vip.yaml mode=0777
+
+    - name: Delete cni folder
+      ansible.builtin.file:
+        path: /etc/cni/net.d
+        state: absent
+
+    - name: Generate Certificate Key
+      ansible.builtin.command: kubeadm certs certificate-key
+      register: certkey
+
+    #- name: Initialize K8s CLuster
+    #  #ansible.builtin.command: kubeadm init --apiserver-advertise-address=$IPADDR  --apiserver-cert-extra-sans=$IPADDR --pod-network-cidr=192.168.20.0/24 --node-name $NODENAME
+    #  #ansible.builtin.command: kubeadm init --apiserver-advertise-address=$IPADDR  --apiserver-cert-extra-sans=$IPADDR --pod-network-cidr=10.244.0.0/16 --node-name $NODENAME
+    #  #ansible.builtin.command: kubeadm init --apiserver-advertise-address=$IPADDR  --apiserver-cert-extra-sans=$IPADDR --pod-network-cidr=10.244.0.0/16 --node-name $NODENAME --control-plane-endpoint {{ controlplane_endpoint }} --v=5"
+    #  #ansible.builtin.command: sudo kubeadm init --v=5 --control-plane-endpoint "192.168.11.3" --apiserver-advertise-address=$IPADDR  --apiserver-cert-extra-sans=$IPADDR --pod-network-cidr=10.244.0.0/16 --node-name=$NODENAME
+    #  ansible.builtin.command: sudo kubeadm init --v=6 --control-plane-endpoint {{ controlplane_endpoint_ipaddress }} --apiserver-cert-extra-sans={{ controlplane_endpoint_ipaddress }} --pod-network-cidr=10.244.0.0/16 --node-name=$NODENAME --upload-certs --certificate-key {{ certkey.stdout }}
+    #  environment:
+    #    IPADDR: "{{ ip_result.stdout }}"
+    #    NODENAME: "{{ hostname_result.stdout }}"
+    #  ignore_errors: yes
+    #  register: init_result
+
+    - name: Template Kubeadm Config
+      ansible.builtin.template:
+        src: files/kubeadm-config.j2.yaml 
+        dest: ./kubeadm-config.yaml
+
+    - name: Apply Kubeadm Config
+      ansible.builtin.command: sudo kubeadm init --v=6 --config kubeadm-config.yaml
+      environment:
+        IPADDR: "{{ ip_result.stdout }}"
+        NODENAME: "{{ hostname_result.stdout }}"
+      ignore_errors: yes
+      register: init_result
+
+    - name: Retry Init
+      when: init_result.rc != 0
+      block:
+      - name: Reset Kubeadm
+        ansible.builtin.command: sudo yes | sudo kubeadm reset
+
+      - name: Delete CNI Folder
+        ansible.builtin.command: sudo rm /etc/cni/net.d -rf
+
+      - name: Copy Generated Kube-VIP manifest to Controller Node
+        copy: src=files/kube-vip.yaml dest=/etc/kubernetes/manifests/kube-vip.yaml mode=0777
+
+      - name: ReInitialize K8s CLuster
+        ansible.builtin.command: sudo kubeadm init --v=6 --control-plane-endpoint {{ controlplane_endpoint_ipaddress }} --apiserver-cert-extra-sans={{ controlplane_endpoint_ipaddress }} --pod-network-cidr=10.244.0.0/16 --node-name=$NODENAME --upload-certs --certificate-key {{ certkey.stdout }}
+        environment:
+          IPADDR: "{{ ip_result.stdout }}"
+          NODENAME: "{{ hostname_result.stdout }}"
+
+    - name: Setup kubeconfig for user
+      command: "{{ item }}"
+      with_items:
+        - mkdir -p /home/gemini/.kube
+        - cp -i /etc/kubernetes/admin.conf /home/gemini/.kube/config
+        - chown gemini:gemini /home/gemini/.kube/config
+
+    - name: Apply Flannel Manifest
+      command: kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml --kubeconfig=/home/gemini/.kube/config
+
+    - name: Generate Join Command
+      command: kubeadm token create --print-join-command
+      register: join_command
+
+    - name: Copy Join Command for Worker Nodes
+      local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./join-command-worker"
+
+    - name: Copy Join Command for Controller Nodes
+      local_action: copy content="{{ join_command.stdout_lines[0] }} --control-plane --certificate-key {{ certkey.stdout }}" dest="./join-command-controller"
+
+    - name: Copy Kubernetes Credentials to HOME
+      ansible.builtin.fetch:
+        src: /home/gemini/.kube/config
+        dest: kube-config
+        flat: yes
+
+    - name: CHOWN Kubernetes Credentials
+      delegate_to: localhost
+      ansible.builtin.file:
+        path: kube-config
+        owner: ansible
+        group: ansible
+
+## Secondary Master Node(s) setup
+- hosts: secondarycontrollers
+  become: yes
+  remote_user: gemini
+  tasks:
+    - name: Ensure Manifests Directory on Secondary Controllers
+      ansible.builtin.file:
+        path: /etc/kubernetes/manifests
+        state: directory
+        mode: '0755'
+      
+    - name: Copy Generated Kube-VIP manifest to Controller Node
+      copy: src=files/kube-vip.yaml dest=/etc/kubernetes/manifests/kube-vip.yaml mode=0777
+
+    - name: Copy Join Command To Controller Node
+      copy: src=join-command-controller dest=/tmp/join-command.sh mode=0777
+
+    - name: Join the Node to the Cluster
+      ansible.builtin.command: sh /tmp/join-command.sh
+
+# Worker Node Specific Setup
+- hosts: workers
+  become: yes
+  remote_user: gemini
+  tasks:
+    - name: Copy Join Command To Worker Node
+      copy: src=join-command-worker dest=/tmp/join-command.sh mode=0777
+
+    - name: Join the Node to the Cluster
+      ansible.builtin.command: sh /tmp/join-command.sh
+
+## Install MetalLB
+#- hosts: localhost
+#  become: yes
+#  become_user: ansible
+#  tasks:
+#      - name: Apply MetalLB Manifest
+#        ansible.builtin.command: kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.3/config/manifests/metallb-native.yaml
+#
+#      - name: Wait for MetalLB Pods to become ready
+#        ansible.builtin.shell: "kubectl get pods --kubeconfig=/home/ansible/.kube/config -n metallb-system -o custom-columns=NAMESPACE:metadata.namespace,POD:metadata.name,PodIP:status.podIP,READY-true:status.containerStatuses[*].ready"
+#        retries: 10
+#        delay: 10
+#        register: metallb_result
+#        until: metallb_result.stdout.find("false") == -1
+#
+#      - name: Configure MetalLB
+#        ansible.builtin.command: kubectl apply -f files/metallb_deployment_l2.yaml
+
+
+# Install Age, Go-Task, pre-commit
+- hosts: localhost
+  become: yes
+  #become_user: ansible
+  tasks:
+    - name: Install Local Packages
+      ansible.builtin.apt:
+        name: "{{ packages }}"
+        state: present
+        update_cache: yes
+      vars:
+        packages:
+          - age
+          - pre-commit
+          - jq
+
+    - name: Install Go-Task
+      ansible.builtin.shell: >
+          sudo sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
+      args:
+        creates: /usr/local/bin/task
+
+    - name: Install yq
+      ansible.builtin.shell: >
+        wget https://github.com/mikefarah/yq/releases/download/v4.27.2/yq_linux_amd64.tar.gz -O - |  tar xz && mv yq_linux_amd64 /usr/local/bin/yq
+      args:
+        creates: /usr/local/bin/yq
+
+    - name: Check if sops is installed
+      command: dpkg-query -W sops
+      register: check_deb
+      failed_when: check_deb.rc > 1
+      changed_when: check_deb.rc == 1
+
+    - name: Download my_package
+      get_url: 
+        url=https://github.com/mozilla/sops/releases/download/v3.7.3/sops_3.7.3_amd64.deb
+        dest="/home/ansible/playbooks/gemini/files/sops_3.7.3_amd64.deb"
+      when: check_deb.rc == 1
+
+    - name: Install my_package
+      apt: deb="/home/ansible/playbooks/gemini/files/sops_3.7.3_amd64.deb"
+      when: check_deb.rc == 1
+
+# Setup Host Tools
+- hosts: localhost
+  become: yes
+  become_user: ansible
+  tasks:
+    - name: Ensure Age Key Directory
+      ansible.builtin.file:
+        path: "{{ cluster_name }}/.config/sops/age"
+        state: directory
+        mode: '0755'
+        
+    - name: Create Age Key
+      #ansible.builtin.command: age-keygen -o age.agekey
+      ansible.builtin.command: "age-keygen -o {{ cluster_name }}/.config/sops/age/keys.txt"
+      args:
+        chdir: "{{ cluster_name }}"
+        #creates: "{{ cluster_name }}"/age.agekey
+        creates: "{{ cluster_name }}/.config/sops/age/keys.txt"
+
+    - name: Get Age Pubkey
+      ansible.builtin.slurp:
+        src: "{{ cluster_name }}/.config/sops/age/keys.txt"
+      register: age_key_file
+
+    - name: Add Age Pubkey to envrc
+      ansible.builtin.lineinfile:
+        path: "{{ cluster_name }}/.envrc"
+        regexp: '^export BOOTSTRAP_AGE_PUBLIC_KEY'
+        line: "export BOOTSTRAP_AGE_PUBLIC_KEY=\"{{ age_key_file['content'] | b64decode | regex_findall('public key: (.+)') | first }}\""
+
+    # TODO Update .sops.yaml with AGE public key
+    - name: Copy .sops.yaml from Templates
+      ansible.builtin.template:
+        src: "{{ cluster_name }}/templates/.sops.yaml.j2"
+        dest: "{{ cluster_name }}/.sops.yaml"
+      vars:
+        AGE_PUBLIC_KEY: "{{ age_key_file['content'] | b64decode | regex_findall('public key: (.+)') | first }}"
+
+    
+    # TODO Copy cert-manager-secret from files to cluster directory
+    - name: Copy cert-manager-secret from files to cluster
+      ansible.builtin.copy:
+        src: files/cert-manager-secret.sops.yaml
+        dest: "{{ cluster_name }}/clusters/my-cluster/apps/networking/traefik/cert-manager-secret.sops.yaml"
+
+    # TODO Encrypt cert-manager-secret
+    - name: Encrypt cert-manager-secret
+      ansible.builtin.command: "sops -e --in-place clusters/my-cluster/apps/networking/traefik/cert-manager-secret.sops.yaml"
+      args:
+        chdir: "{{ cluster_name }}"
+
+    - name: Initialize Go-Task
+      ansible.builtin.command: task --init
+      args:
+        #TODO make dynamic
+        chdir: "{{ cluster_name }}"
+        creates: "{{ cluster_name }}/Taskfile.yaml"
+
+    - name: Enable Pre-Commit
+      ansible.builtin.command: task precommit:init
+      args:
+        #TODO make dynamic
+        chdir: "{{ cluster_name }}"
+
+    - name: Update Pre-Commit
+      ansible.builtin.command: task precommit:update
+      args:
+        #TODO make dynamic
+        chdir: "{{ cluster_name }}"
+
+# Install Flux
+- hosts: localhost
+  become: yes
+  become_user: ansible
+  tasks:
+      - name: Check Flux Prereqs
+        ansible.builtin.command: flux check --pre
+
+      - name: Include Flux Data from Var File
+        ansible.builtin.include_vars:
+            file: flux_data.yml
+            name: flux_data 
+
+      - name: Initialize Flux
+        ansible.builtin.command: task cluster:install
+        args:
+          chdir: "{{ cluster_name }}"
+        register: cluster_install
+        failed_when: cluster_install.rc > 1
+        changed_when: cluster_install.rc == 1
