@@ -7,6 +7,7 @@
 	"features": {
 		"ghcr.io/devcontainers-contrib/features/ansible:2": {}
 	}
+	// NOTE: needed to change /etc/resolv.conf to include nameserver and search suffix 
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
