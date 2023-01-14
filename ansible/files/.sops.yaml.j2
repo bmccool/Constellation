@@ -1,6 +1,6 @@
 ---
 creation_rules:
-  - path_regex: {{ cluster_friendly_name }}/.*\.sops\.ya?ml
+  - path_regex: .*\.sops\.ya?ml
     encrypted_regex: "^(data|stringData)$"
     # TODO These age keys all need to be created dynamically - use ansible to create this file after age keys are setup
     key_groups:

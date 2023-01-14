@@ -208,21 +208,21 @@
   tasks:
       - name: Ensure Age Key Directory
         ansible.builtin.file:
-            path: "{{ cluster_path }}/.config/sops/age"
+            path: ~/.config/sops/age
             state: directory
             mode: '0755'
 
       - name: Create Age Key
         # ansible.builtin.command: age-keygen -o age.agekey
-        ansible.builtin.command: "age-keygen -o {{ cluster_path }}/.config/sops/age/keys.txt"
+        ansible.builtin.command: "age-keygen -o ~/.config/sops/age/keys.txt"
         args:
             chdir: "{{ cluster_path }}"
             # creates: "{{ cluster_name }}"/age.agekey
-            creates: "{{ cluster_path }}/.config/sops/age/keys.txt"
+            creates: ~/.config/sops/age/keys.txt
 
       - name: Get Age Pubkey
         ansible.builtin.slurp:
-            src: "{{ cluster_path }}/.config/sops/age/keys.txt"
+            src: ~/.config/sops/age/keys.txt
         register: age_key_file
 
       - name: Ensure envrc
