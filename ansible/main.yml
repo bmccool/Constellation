@@ -77,28 +77,17 @@
       #   ansible.builtin.wait_for:
       #     timeout: 6000
 
-      - name: Initialize K8s CLuster
-        #  #ansible.builtin.command: kubeadm init --apiserver-advertise-address=$IPADDR  --apiserver-cert-extra-sans=$IPADDR --pod-network-cidr=192.168.20.0/24 --node-name $NODENAME
-        ansible.builtin.command: sudo kubeadm init --apiserver-advertise-address=$IPADDR  --apiserver-cert-extra-sans=$IPADDR --pod-network-cidr=10.244.0.0/16 --node-name $NODENAME
-        #  #ansible.builtin.command: kubeadm init --apiserver-advertise-address=$IPADDR  --apiserver-cert-extra-sans=$IPADDR --pod-network-cidr=10.244.0.0/16 --node-name $NODENAME --control-plane-endpoint {{ controlplane_endpoint }} --v=5"
-        #  #ansible.builtin.command: sudo kubeadm init --v=5 --control-plane-endpoint "192.168.11.3" --apiserver-advertise-address=$IPADDR  --apiserver-cert-extra-sans=$IPADDR --pod-network-cidr=10.244.0.0/16 --node-name=$NODENAME
-        #  ansible.builtin.command: sudo kubeadm init --v=6 --control-plane-endpoint {{ controlplane_endpoint_ipaddress }} --apiserver-cert-extra-sans={{ controlplane_endpoint_ipaddress }} --pod-network-cidr=10.244.0.0/16 --node-name=$NODENAME --upload-certs --certificate-key {{ certkey.stdout }}
+      - name: Template Kubeadm Config
+        ansible.builtin.template:
+            src: files/kubeadm-config.j2.yaml
+            dest: ./kubeadm-config.yaml
+
+      - name: Apply Kubeadm Config
+        ansible.builtin.command: sudo kubeadm init --v=6 --config kubeadm-config.yaml
         environment:
+            # TODO these env variables are probably not needed.  They used to be used in the command line arguments
             IPADDR: "{{ ip_result.stdout }}"
             NODENAME: "{{ hostname_result.stdout }}"
-      #  ignore_errors: yes
-      #  register: init_result
-
-      # - name: Template Kubeadm Config
-      #   ansible.builtin.template:
-      #     src: files/kubeadm-config.j2.yaml
-      #     dest: ./kubeadm-config.yaml
-
-      # - name: Apply Kubeadm Config
-      #   ansible.builtin.command: sudo kubeadm init --v=6 --config kubeadm-config.yaml
-      #   environment:
-      #     IPADDR: "{{ ip_result.stdout }}"
-      #     NODENAME: "{{ hostname_result.stdout }}"
 
       - name: Setup kubeconfig for user
         command: "{{ item }}"
