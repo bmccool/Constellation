@@ -1,0 +1,44 @@
+---
+# installk8s/tasks/install_k8s_binaries.yml
+- name: Add Apt Signing Key for Kubernetes
+  ansible.builtin.apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: Add Apt Repo for Kubernetes
+  ansible.builtin.apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    filename: kubernetes.list
+
+- name: Install Kubernetes Binaries
+  ansible.builtin.apt:
+    name: "{{ packages }}"
+    state: present
+    update_cache: yes
+    allow_downgrade: yes
+  vars:
+    packages:
+      # https://kubernetes.io/releases/version-skew-policy/
+      # sudo apt list -a kubectl
+      - kubelet={{ k8s_version }}
+      - kubeadm={{ k8s_version }}
+      - kubectl={{ k8s_version }}
+      - nfs-common
+      - jq
+
+- name: Get IP Address
+  ansible.builtin.shell: "ip address show eth0 | grep 'inet ' | awk '{ print $2 }' | cut -d '/' -f1"
+  register: ip_result
+
+- name: Configure node IP
+  lineinfile:
+    path: /etc/default/kubelet
+    line: KUBELET_EXTRA_ARGS=--node-ip={{ ip_result.stdout }}
+    create: yes
+
+- name: Restart Kubelet
+  service:
+    name: kubelet
+    daemon_reload: yes
+    state: restarted

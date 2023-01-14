@@ -1,0 +1,4 @@
+---
+# installk8s/handlers/main.yml
+- name: docker status
+  service: name=docker state=started

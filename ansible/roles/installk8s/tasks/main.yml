@@ -1,0 +1,23 @@
+---
+# installk8s/tasks/main.yml
+- name: Update and Upgrade Packages
+  include_tasks: update_upgrade_packages.yml
+
+- name: Install kubelet kubeadm and kubectl
+  include_tasks: install_k8s_binaries.yml
+
+- name: Disable Swap
+  include_tasks: disable_swap.yml
+
+- name: Install Container Runtime (Docker)
+  include_tasks: install_docker_container_runtime.yml
+
+- name: Fix Containerd Issue 4581
+  include_tasks: containerd_4581.yml
+
+- name: Fix Containerd cgroups issue
+  # Note, must come after 4851 issue
+  # TODO do we still need 4851?  It just deletes the config...
+  # https://gjhenrique.com/cgroups-k8s/
+  # Both of these tasks massage the config and restart the daemon... maybe they can be combined?
+  include_tasks: containerd_cgroups.yml

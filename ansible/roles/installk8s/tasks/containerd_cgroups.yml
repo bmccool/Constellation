@@ -1,0 +1,27 @@
+---
+# installk8s/tasks/containerd_cgroups.yml
+# See https://gjhenrique.com/cgroups-k8s/
+- name: Remove Containerd Config
+  ansible.builtin.file:
+    path: /etc/containerd/config.toml
+    state: touch
+
+- name: Insert systemdCgroup Block
+  ansible.builtin.blockinfile:
+    path: /etc/containerd/config.toml
+    block: |
+      version = 2
+      [plugins]
+        [plugins."io.containerd.grpc.v1.cri"]
+        [plugins."io.containerd.grpc.v1.cri".containerd]
+            [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
+              [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+                runtime_type = "io.containerd.runc.v2"
+                [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+                  SystemdCgroup = true
+
+- name: Restart Containerd Daemon
+  ansible.builtin.service:
+    name: containerd
+    daemon_reload: yes
+    state: restarted

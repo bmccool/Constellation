@@ -1,0 +1,12 @@
+---
+# installk8s/tasks/containerd_4581.yml
+- name: Remove Containerd Config
+  ansible.builtin.file:
+    path: /etc/containerd/config.toml
+    state: absent
+
+- name: Restart Containerd Daemon
+  ansible.builtin.service:
+    name: containerd
+    daemon_reload: yes
+    state: restarted

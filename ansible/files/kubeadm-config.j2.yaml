@@ -1,31 +1,31 @@
 ---
 kind: ClusterConfiguration
 apiVersion: kubeadm.k8s.io/v1beta3
-kubernetesVersion: 1.25.0
-#TODO
+kubernetesVersion: 1.24.3
+# TODO
 clusterName: "{{ cluster_friendly_name }}"
 apiServer:
-  #timeoutForControlPlane: 4m0s
-  certSANs: 
+  # timeoutForControlPlane: 4m0s
+  certSANs:
     - "{{ ip_result.stdout }}"
 networking:
   dnsDomain: cluster.local
-  #serviceSubnet: 10.244.0.0/16
+  # serviceSubnet: 10.244.0.0/16
   podSubnet: "{{ pod_network_cidr }}"
 ---
 kind: KubeletConfiguration
 apiVersion: kubelet.config.k8s.io/v1beta1
 cgroupDriver: "systemd"
-#protectKernelDefaults: true
+# protectKernelDefaults: true
 ---
 kind: InitConfiguration
 apiVersion: kubeadm.k8s.io/v1beta3
 nodeRegistration:
-  #criSocket: unix:///var/run/containerd/containerd.sock
+  # criSocket: unix:///var/run/containerd/containerd.sock
   imagePullPolicy: IfNotPresent
-  #TODO
+  # TODO
   name: "{{ hostname_result.stdout }}"
-  #taints: null
+  # taints: null
   localAPIEndpoint:
     advertiseAddress: "{{ ip_result.stdout }}"
     bindPort: 6443
