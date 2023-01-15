@@ -7,7 +7,7 @@ metadata:
 spec:
   interval: 10m
   # Path to charts directory from flux directory
-  path: ./charts
+  path: .cluster/charts
   prune: true
   sourceRef:
     kind: GitRepository
