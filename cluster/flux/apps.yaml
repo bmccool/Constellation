@@ -9,7 +9,7 @@ spec:
   dependsOn:
     - name: core
   # Path to apps directory from flux directory TODO why two dots?
-  path: ../apps
+  path: ./cluster/apps
   prune: true
   sourceRef:
     kind: GitRepository

@@ -11,7 +11,7 @@ spec:
     #- name: config
     #- name: crds
   # Path to core directory from flux directory
-  path: ./core
+  path: ./cluster/core
   prune: false
   sourceRef:
     kind: GitRepository
