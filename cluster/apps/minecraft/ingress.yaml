@@ -3,8 +3,10 @@ kind: Ingress
 metadata:
   name: minecraft-ingress
   namespace: minecraft-ns
-  annotations:
+  labels:
     app: minecraft-minecraft
+  annotations:
+    #app: minecraft-minecraft
     # (Optional): Annotations for the Ingress Controller
     # ---
     # General:
