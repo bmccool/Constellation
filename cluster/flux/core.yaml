@@ -8,8 +8,6 @@ spec:
   interval: 10m
   dependsOn:
     - name: charts
-    #- name: config
-    #- name: crds
   # Path to core directory from flux directory
   path: ./cluster/core
   prune: false
