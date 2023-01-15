@@ -32,7 +32,7 @@ spec:
               service:
                 name: minecraft-minecraft  # The name of the service
                 port:
-                  number: 25565  # Service Portnumber
+                  number: 30100  # Service Portnumber
                   #name: minecraft
   # tls:
   # - hosts:
