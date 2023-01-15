@@ -281,10 +281,10 @@
             # TODO make dynamic
             chdir: "{{ cluster_path }}"
 
-      - name: Copy kube-config to cluster
+      - name: Copy kube-config to local user
         ansible.builtin.copy:
             src: kube-config
-            dest: "{{ cluster_path }}/kube-config"
+            dest: "/home/{{ localuser }}/.kube/config"
 
 # Install Flux
 - hosts: localhost
