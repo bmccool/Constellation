@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nexus-ingress
+  namespace: nexus-ns
+  annotations:
+spec:
+  rules:
+    - host: "nexus.gemini.brendonmccool.com"  # Your hostname
+      http:
+        paths:
+        # Path-based routing settings:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nexus  # The name of the service
+                port:
+                  number: 8081  # Service Portnumber
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nexus-containers-ingress
+  namespace: nexus-ns
+  annotations:
+spec:
+  rules:
+    - host: "nexus-containers.gemini.brendonmccool.com"  # Your hostname
+      http:
+        paths:
+        # Path-based routing settings:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nexus  # The name of the service
+                port:
+                  number: 5001  # Service Portnumber

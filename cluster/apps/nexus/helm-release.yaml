@@ -1,0 +1,65 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: nexus
+  namespace: nexus-ns
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      # -- Version of the app-template helm chart
+      # this example is not automatically updated, so be sure to use the latest chart version
+      version: 0.1.1
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-helm-charts
+        namespace: flux-system
+
+  values:
+    image:
+      repository: sonatype/nexus3
+      pullPolicy: IfNotPresent
+      tag: 3.41.1
+
+    strategy:
+      type: Recreate
+
+    # -- environment variables.
+    env:
+      TZ: "America/New York"
+      #INSTALL4J_ADD_VM_PARAMS: "-Xms4g -Xmx4g -XX:MaxDirectMemorySize=5g"
+    # -- Configures service settings for the chart.
+    service:
+      main:
+        ports:
+          http:
+            port: 8081
+          registry:
+            enabled: true
+            port: 5001
+
+    # -- Configure persistence settings for the chart under this key.
+    persistence:
+      nexus-data:
+        enabled: true
+        type: nfs
+        server: NFS.brendonmccool.com
+        path: /mnt/k8s/gemini/nexus
+
+    podSecurityContext:
+      fsGroup: 200
+      #runAsUser: nexus
+
+    #securityContext:
+      #runAsUser: nexus
+
+    #initContainers:
+    #  init-db:
+    #    image: docker.io/library/busybox:stable
+    #    command: ["sh", "-c", "chown -R 200:200 /nexus-data"]
+    #    volumeMounts:
+    #      - name: nexus-data
+    #        mountPath: /nexus-data
