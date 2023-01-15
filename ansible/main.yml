@@ -246,7 +246,7 @@
 
       - name: Ensure cert-manager directory
         ansible.builtin.file:
-            path: "{{ cluster_path }}/{{ cluster_friendly_name }}/apps/networking/traefik"
+            path: "{{ cluster_path }}/apps/networking/traefik"
             state: directory
             mode: '0755'
 
@@ -254,11 +254,11 @@
       - name: Copy cert-manager-secret from files to cluster
         ansible.builtin.copy:
             src: files/cert-manager-secret.sops.yaml
-            dest: "{{ cluster_path }}/{{ cluster_friendly_name }}/apps/networking/traefik/cert-manager-secret.sops.yaml"
+            dest: "{{ cluster_path }}/apps/networking/traefik/cert-manager-secret.sops.yaml"
 
       # TODO Encrypt cert-manager-secret
       - name: Encrypt cert-manager-secret
-        ansible.builtin.command: "sops -e --in-place {{ cluster_friendly_name }}/apps/networking/traefik/cert-manager-secret.sops.yaml"
+        ansible.builtin.command: "sops -e --in-place apps/networking/traefik/cert-manager-secret.sops.yaml"
         args:
             chdir: "{{ cluster_path }}"
 
