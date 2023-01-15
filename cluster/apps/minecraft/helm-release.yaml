@@ -1,0 +1,93 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: minecraft
+  namespace: minecraft-ns
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      # -- Version of the app-template helm chart
+      # this example is not automatically updated, so be sure to use the latest chart version
+      version: 0.1.1
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: minecraft-server-chats
+        namespace: flux-system
+
+  values:
+    # ref: https://hub.docker.com/r/itzg/minecraft-server/
+    image:
+      repository: itzg/minecraft-server
+      tag: latest
+      pullPolicy: IfNotPresent
+      pullSecret: ""
+
+
+      # ### WARNING ###
+      # Minecraft is not horizontally scalable, adjusting this will most likely break your setup.
+      # ### WARNING ###
+      replicaCount: 1
+
+      ## Configure resource requests and limits
+      ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+      ##
+      resources:
+        requests:
+          memory: 512Mi
+          cpu: 500m
+
+    strategy:
+      type: Recreate
+
+    # -- environment variables.
+    env:
+      TZ: "America/New York"
+
+    minecraftServer:
+      # This must be overridden, since we can't accept this for the user.
+      eula: "TRUE"
+      # One of: LATEST, SNAPSHOT, or a specific version (ie: "1.7.9").
+      version: "LATEST"
+      # This can be one of "VANILLA", "FORGE", "SPIGOT", "BUKKIT", "PAPER", "FTBA", "SPONGEVANILLA", "CURSEFORGE"
+      type: "VANILLA"
+      # One of: peaceful, easy, normal, and hard
+      difficulty: easy
+      # One of: creative, survival, adventure, spectator
+      gameMode: survival
+      worldSaveName: world
+      # If you adjust this, you may need to adjust resources.requests above to match.
+      memory: 1024M
+      serviceType: ClusterIP
+      # Set the external port of the service, usefull when using the LoadBalancer service type
+      servicePort: 25565
+
+      rcon:
+        # If you enable this, make SURE to change your password below.
+        enabled: true
+        port: 25575
+        password: "mcpassword"
+        # existingSecret:
+        secretKey: rcon-password
+        serviceType: ClusterIP
+
+    persistence:
+      annotations: {}
+      ## minecraft data Persistent Volume Storage Class
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+      ##   GKE, AWS & OpenStack)
+      ##
+      # storageClass: "-"
+      dataDir:
+        # Set this to false if you don't care to persist state between restarts.
+        enabled: true
+        Size: 1Gi
+        existingClaim: minecraft-pvc
+        ## specify a subpath in the volume where the data is. Useful when sharing volumes with other apps.
+        # subPath: /path/to/dataDir
