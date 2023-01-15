@@ -13,11 +13,13 @@ metadata:
     # kubernetes.io/ingress.class: traefik
     #
     # TLS configuration:
-    traefik.ingress.kubernetes.io/router.entrypoints: 25565/TCP
+    # traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
+    traefik.ingress.kubernetes.io/router.entrypoints=:25565
     # traefik.ingress.kubernetes.io/router.tls: "true"
     #
     # Middleware:
     # traefik.ingress.kubernetes.io/router.middlewares:your-middleware@kubernetescrd
+
 spec:
   rules:
     - host: "minecraft.gemini.brendonmccool.com"  # Your hostname
