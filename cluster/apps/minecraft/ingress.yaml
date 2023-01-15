@@ -32,8 +32,8 @@ spec:
               service:
                 name: minecraft-minecraft  # The name of the service
                 port:
-                  number: 30100  # Service Portnumber
-                  #name: minecraft
+                  #number: 30100  # Service Portnumber
+                  name: minecraft
   # tls:
   # - hosts:
   #   - your-hostname.com  # Your hostname
