@@ -4,6 +4,7 @@ metadata:
   name: minecraft-ingress
   namespace: minecraft-ns
   annotations:
+    app: minecraft-minecraft
     # (Optional): Annotations for the Ingress Controller
     # ---
     # General:
