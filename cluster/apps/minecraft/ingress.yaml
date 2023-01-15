@@ -14,7 +14,7 @@ metadata:
     #
     # TLS configuration:
     # traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
-    traefik.ingress.kubernetes.io/router.entrypoints=:25565
+    #traefik.ingress.kubernetes.io/router.entrypoints: 25565
     # traefik.ingress.kubernetes.io/router.tls: "true"
     #
     # Middleware:
