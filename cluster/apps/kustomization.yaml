@@ -12,6 +12,7 @@ resources:
   #- lidarr-transmission
   #- mealie
   - monitoring
+  - minecraft
   #- nexus
   - podinfo
   #- radarr-transmission
