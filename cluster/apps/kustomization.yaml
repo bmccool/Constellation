@@ -20,6 +20,6 @@ resources:
   #- readarr-transmission
   #- sonarr-transmission
   #- unpackerr
-  #- uptime-kuma
+  - uptime-kuma
   - networking
   #- sheetable
