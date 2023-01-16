@@ -11,7 +11,7 @@ spec:
   # entryPoints:
   #   - "minecraft", "web", "websecure"
   routes:
-    - match: HostSNI(`*`)
+    - match: HostSNI(`minecraft.gemini.brendonmccool.com`)
       # kind: Rule
       # middlewares:
       #   - name: headers-default
