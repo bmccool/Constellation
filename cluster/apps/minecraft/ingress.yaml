@@ -2,10 +2,10 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRouteTCP
 metadata:
-  name: mc-ing-two
+  name: mc-ing-route-tcp
   namespace: minecraft-ns
-  labels:
-    app: minecraft-minecraft
+  #labels:
+  #  app: minecraft-minecraft
 
 spec:
   entryPoints:
