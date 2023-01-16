@@ -19,10 +19,10 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: mc-router-services-watcher
-  namespace: minecraft-ns
 subjects:
   - kind: ServiceAccount
     name: mc-router
+    namespace: minecraft-ns
 roleRef:
   kind: ClusterRole
   name: services-watcher
