@@ -8,6 +8,9 @@ apiServer:
   # timeoutForControlPlane: 4m0s
   certSANs:
     - "{{ ip_result.stdout }}"
+  # Expand node port range for minecraft according to https://hub.docker.com/r/itzg/mc-router
+  extraArgs:
+    service-node-port-range: 80-32767
 networking:
   dnsDomain: cluster.local
   # serviceSubnet: 10.244.0.0/16
