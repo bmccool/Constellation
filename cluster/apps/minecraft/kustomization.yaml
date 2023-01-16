@@ -5,5 +5,5 @@ resources:
   - namespace.yaml
   - data-pvc.yaml
   - helm-release.yaml
-  - ingress.yaml
+  #- ingress.yaml
   - mc-router.yaml
