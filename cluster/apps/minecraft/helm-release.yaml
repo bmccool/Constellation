@@ -64,7 +64,8 @@ spec:
       gameMode: survival
       worldSaveName: world
       # If you adjust this, you may need to adjust resources.requests above to match.
-      memory: 1024M
+      memory: 2g
+      viewDistance: 25
       # directed to the correct node if you connect to any
       #serviceType: NodePort
       # restore the world from a backup on first execution (requires NFS volume - see below)

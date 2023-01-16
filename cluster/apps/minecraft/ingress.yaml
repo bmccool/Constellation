@@ -8,14 +8,10 @@ metadata:
   #  app: minecraft-minecraft
 
 spec:
-  # entryPoints:
+  # entryPoints:  #ALL??
   #   - "minecraft", "web", "websecure"
   routes:
     - match: HostSNI(`*`)
-      # kind: Rule
-      # middlewares:
-      #   - name: headers-default
-      #     namespace: traefik
       services:
         - name: minecraft-minecraft
           port: 25565
