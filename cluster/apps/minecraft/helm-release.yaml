@@ -38,7 +38,7 @@ spec:
       ##
       resources:
         requests:
-          memory: 512Mi
+          memory: 2g
           cpu: 500m
 
     strategy:
