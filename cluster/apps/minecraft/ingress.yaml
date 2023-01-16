@@ -9,9 +9,7 @@ metadata:
 
 spec:
   entryPoints:
-    - minecraft
-    - web
-    - websecure
+    - minecraft, web, websecure
   routes:
     - match: HostSNI(`*`)
       # kind: Rule
