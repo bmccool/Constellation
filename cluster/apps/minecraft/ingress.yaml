@@ -30,7 +30,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: mc-router  # The name of the service
+                name: minecraft-minecraft  # The name of the service
                 port:
                   number: 25565
                   #number: 30100  # Service Portnumber

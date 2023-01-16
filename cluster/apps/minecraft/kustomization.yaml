@@ -6,4 +6,4 @@ resources:
   - data-pvc.yaml
   - helm-release.yaml
   - ingress.yaml
-  - mc-router.yaml
+  # - mc-router.yaml
