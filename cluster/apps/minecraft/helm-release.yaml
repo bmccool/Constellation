@@ -47,8 +47,8 @@ spec:
     env:
       TZ: "America/New York"
 
-    serviceAnnotations:
-      "mc-router.itzg.me/externalServerName": "minecraft.gemini.brendonmccool.com"
+    # serviceAnnotations:
+    #   "mc-router.itzg.me/externalServerName": "minecraft.gemini.brendonmccool.com"
 
     minecraftServer:
       # This must be overridden, since we can't accept this for the user.
