@@ -1,3 +1,24 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: mc-ing-two
+  namespace: minecraft-ns
+
+spec:
+  entryPoints:
+    - minecraft
+
+  routes:
+    - match: Host(`minecraft.gemini.brendonmccool.com`)
+      kind: Rule
+      # middlewares:
+      #   - name: headers-default
+      #     namespace: traefik
+      services:
+        - name: minecraft-minecraft
+          port: 25565
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -5,8 +26,6 @@ metadata:
   namespace: minecraft-ns
   labels:
     app: minecraft-minecraft
-    traefik.tcp.routers.minecraft-minecraft.rule=HostSNI(`*`):
-    traefik.tcp.routers.minecraft-minecraft.entrypoints=minecraft:
   annotations:
     #app: minecraft-minecraft
     # (Optional): Annotations for the Ingress Controller
