@@ -75,6 +75,11 @@ spec:
         level: INFO #ERROR
 
     ports:
+      minecraft:
+        port: 25565
+        expose: true
+        exposedPort: 25565
+        protocol: TCP
       # Configure your entrypoints here...
       web:
         # (optional) Permanent Redirect to HTTPS
