@@ -18,9 +18,7 @@ spec:
         name: minecraft-server-charts
         namespace: flux-system
 
-  labels:
-    traefik.tcp.routers.vanilla.rule: HostSNI(`*`)
-    traefik.tcp.routers.vanilla.entrypoints: minecraft
+
   values:
     # ref: https://hub.docker.com/r/itzg/minecraft-server/
     image:
