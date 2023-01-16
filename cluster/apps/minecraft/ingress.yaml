@@ -4,6 +4,8 @@ kind: IngressRouteTCP
 metadata:
   name: mc-ing-two
   namespace: minecraft-ns
+  labels:
+    app: minecraft-minecraft
 
 spec:
   entryPoints:
