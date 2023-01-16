@@ -62,13 +62,13 @@ spec:
       # If you adjust this, you may need to adjust resources.requests above to match.
       memory: 1024M
       # directed to the correct node if you connect to any
-      serviceType: NodePort
+      #serviceType: NodePort
       # restore the world from a backup on first execution (requires NFS volume - see below)
-      downloadWorldUrl:
+      #downloadWorldUrl:
       # external port must be unique across all mc server instances on a given node
-      nodePort: 30100
+      #nodePort: 30100
       # Set the external port of the service, usefull when using the LoadBalancer service type
-      servicePort: 30100
+      #servicePort: 30100
 
       rcon:
         # If you enable this, make SURE to change your password below.
