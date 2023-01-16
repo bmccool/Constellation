@@ -106,6 +106,7 @@ spec:
     ingressRoute:
       dashboard:
         enabled: true
+        insecure: true
 
     # Persistent Storage
     persistence:
