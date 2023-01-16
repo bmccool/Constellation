@@ -24,12 +24,12 @@
   tasks:
       - include: roles/installk8s/tasks/install_k8s_binaries.yml
         become_user: root
-      - name: Wait 60s after VM Creation
-        ansible.builtin.wait_for:
-            timeout: 60
-      - name: Done With VM Creation
-        debug:
-            msg: "Hooray!"
+      #- name: Wait 60s after VM Creation
+      #  ansible.builtin.wait_for:
+      #      timeout: 60
+      #- name: Done With VM Creation
+      #  debug:
+      #      msg: "Hooray!"
 
 
 # Verify all newly created VMs are accessoble by SSH
@@ -41,6 +41,9 @@
       - name: Wait For New VMs
         ansible.builtin.wait_for_connection:
             timeout: 600
+      - name: Done With VM Creation
+        debug:
+            msg: "Hooray!"
 
 
 # gemini Node Setup
