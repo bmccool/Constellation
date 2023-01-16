@@ -129,4 +129,4 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: minecraft-pvc
+            claimName: mc-stable-pvc
