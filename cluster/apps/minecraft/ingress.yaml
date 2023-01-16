@@ -5,8 +5,8 @@ metadata:
   namespace: minecraft-ns
   labels:
     app: minecraft-minecraft
-    traefik.tcp.routers.minecraft-minecraft.rule: HostSNI(`*`)
-    traefik.tcp.routers.minecraft-minecraft.entrypoints: minecraft
+    traefik.tcp.routers.minecraft-minecraft.rule=HostSNI(`*`):
+    traefik.tcp.routers.minecraft-minecraft.entrypoints=minecraft:
   annotations:
     #app: minecraft-minecraft
     # (Optional): Annotations for the Ingress Controller
