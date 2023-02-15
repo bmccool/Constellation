@@ -1,1 +1,4 @@
 *flux-git-auth.sops.yaml
+*/files/cert-manager-secret.sops.yaml
+*/files/flux_data.yaml
+*/cluster/.envrc

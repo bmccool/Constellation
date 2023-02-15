@@ -305,7 +305,7 @@
 
       - name: Include Flux Data from Var File
         ansible.builtin.include_vars:
-            file: files/flux_data.yml
+            file: files/flux_data.yaml
             name: flux_data
 
       - name: Initialize Flux

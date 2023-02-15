@@ -1,0 +1,5 @@
+---
+# Your github token for the account that will be manipulating the github repo for the cluster
+gh_token:
+# Your github username for the account that will be manipulating the github repo for the cluster
+gh_user:
