@@ -1,44 +1,45 @@
 ---
 - name: Get SSH Key
   delegate_to: localhost
-  become: no
+  become: false
   block:
-  - name: Ensure SSH Directory Exists
-    ansible.builtin.file:
-      path: ~/.ssh
-      state: directory
-      mode: '0755'
+    - name: Ensure SSH Directory Exists
+      ansible.builtin.file:
+        path: ~/.ssh
+        state: directory
+        mode: '0755'
 
-  - name: Check for existing SSH keys
-    ansible.builtin.stat:
-      path: ~/.ssh/id_rsa 
-    register: ssh_result
+    - name: Check for existing SSH keys
+      ansible.builtin.stat:
+        path: ~/.ssh/id_rsa
+      register: ssh_result
 
-  - name: Generate SSH Keys
-    when: ssh_result.stat == false
-    community.crypto.openssh_keypair:
-      path: ~/.ssh/id_rsa 
+    - name: Generate SSH Keys
+      when: ssh_result.stat == false
+      community.crypto.openssh_keypair:
+        path: ~/.ssh/id_rsa
 
-  - name: Get public SSH Key
-    ansible.builtin.command: cat ~/.ssh/id_rsa.pub
-    register: ssh_keys
+    - name: Get public SSH Key
+      ansible.builtin.command: cat ~/.ssh/id_rsa.pub
+      register: ssh_keys
 
-  - name: Debug SSH Key
-    debug:
-      msg: "{{ ssh_keys.stdout }}"
+    - name: Debug SSH Key
+      debug:
+        msg: "{{ ssh_keys.stdout }}"
 
 - name: Copy SSH Key to Host
   become: yes
   block:
-  - name: Ensure SSH Directory Exists
-    ansible.builtin.file:
-      path: ~/.ssh
-      state: directory
-      mode: '0755'
-  - name: Dump SSH key to file
-    ansible.builtin.copy:
-      dest: ~/.ssh/gemini.rsa.pub
-      content: "{{ ssh_keys.stdout }}"
+    - name: Ensure SSH Directory Exists
+      ansible.builtin.file:
+        path: ~/.ssh
+        state: directory
+        mode: '0755'
+    - name: Dump SSH key to file
+      ansible.builtin.copy:
+        # TODO this should be dynamic based on ciuser
+        dest: ~/.ssh/gemini.rsa.pub
+        content: "{{ ssh_keys.stdout }}"
 
 - name: Configure Cloud Init Options
   become: yes
@@ -49,9 +50,9 @@
       - set
       - "{{ vmid }}"
       - --ciuser
-      - gemini
+      - "{{ ciuser }}"
       - --cipassword
-      - gemini
+      - "{{ cipassword }}"
       - --ipconfig0
       - ip=dhcp
       - --nameserver
