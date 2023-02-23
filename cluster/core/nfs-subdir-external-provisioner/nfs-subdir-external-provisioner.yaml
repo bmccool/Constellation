@@ -23,4 +23,4 @@ spec:
     nfs:
       server: NFS.brendonmccool.com
       # TODO Make dyamic
-      path: /mnt/k8s/gemini
+      path: /mnt/k8s/cancer

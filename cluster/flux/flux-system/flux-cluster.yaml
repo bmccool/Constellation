@@ -11,7 +11,8 @@ spec:
   url: ssh://git@github.com/bmccool/Constellation
 
   ref:
-    branch: main
+    #TODO make dynamic
+    branch: cancer
   secretRef:
     name: flux-git-auth
 

@@ -12,9 +12,10 @@
 #
 
 # Proxmox Initialization
-- hosts: gauss-pve
+- hosts: pve.cancer
+  # TODO Dynamic
   # connection: local
-  become: yes
+  become: true
   # become_user: ansible
 
   roles:
@@ -24,19 +25,13 @@
   tasks:
       - include: roles/installk8s/tasks/install_k8s_binaries.yml
         become_user: root
-      #- name: Wait 60s after VM Creation
-      #  ansible.builtin.wait_for:
-      #      timeout: 60
-      #- name: Done With VM Creation
-      #  debug:
-      #      msg: "Hooray!"
-
 
 # Verify all newly created VMs are accessoble by SSH
 - hosts: controllers:workers
-  gather_facts: no
-  become: yes
-  remote_user: gemini
+  gather_facts: false
+  become: true
+  # TODO dynamic
+  remote_user: cancer
   tasks:
       - name: Wait For New VMs
         ansible.builtin.wait_for_connection:
@@ -45,18 +40,17 @@
         debug:
             msg: "Hooray!"
 
-
-# gemini Node Setup
+# Cancer Node Setup
 - hosts: controllers:workers
-  become: yes
-  remote_user: gemini
+  become: true
+  remote_user: cancer
   roles:
       - role: installk8s
 
 # Master Node Specific Setup
 - hosts: maincontroller
-  become: yes
-  remote_user: gemini
+  become: true
+  remote_user: cancer
   tasks:
       - name: Get IP Address
         ansible.builtin.shell: "ip address show eth0 | grep 'inet ' | awk '{ print $2 }' | cut -d '/' -f1"
@@ -65,6 +59,42 @@
       - name: Get Hostname
         ansible.builtin.command: hostname -s
         register: hostname_result
+
+      - name: Setup Static Pod Yaml for Kube-VIP
+        # dump files/kube-vip.yaml into /etc/kubernetes/manifests/kube-vip.yaml
+        block:
+            - name: Ensure Manifests Directory Exists
+              ansible.builtin.file:
+                  path: /etc/kubernetes/manifests
+                  state: directory
+                  mode: '0755'
+            - name: Get Kube-VIP Version
+              ansible.builtin.shell: curl -sL https://api.github.com/repos/kube-vip/kube-vip/releases | jq -r ".[0].name"
+              register: kube_vip_version
+            - name: Generate Static Pod Manifest for Kube-Vip
+              # ansible.builtin.shell: "sudo ctr image pull ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }}; sudo ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }} vip /kube-vip manifest pod --interface eth0 --address {{ controlplane_endpoint_ipaddress }} --controlplane --arp --leaderElection | sudo tee /etc/kubernetes/manifests/kube-vip.yaml"
+              ansible.builtin.shell: "sudo ctr image pull ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }}; sudo ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }} vip /kube-vip manifest pod --interface eth0 --address {{ controlplane_endpoint_ipaddress }} --controlplane --arp --leaderElection | sudo tee /etc/kubernetes/manifests/kube-vip.yaml"
+              # sudo ctr image pull ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }};
+              # sudo ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:{{ kube_vip_version.stdout }} vip
+              #   /kube-vip manifest pod --interface eth0 --address {{ controlplane_endpoint_ipaddress }} --controlplane --arp --leaderElection | sudo tee /etc/kubernetes/manifests/kube-vip.yaml"
+
+              #  # export VIP=192.168.11.3    {{ controlplane_endpoint_ipaddress  }}
+              #  # export INTERFACE=eth0
+              #  # sudo apt install jq
+              #  # KVVERSION=$(curl -sL https://api.github.com/repos/kube-vip/kube-vip/releases | jq -r ".[0].name")
+              #  # alias kube-vip="sudo ctr image pull ghcr.io/kube-vip/kube-vip:$KVVERSION; sudo ctr run --rm --net-host ghcr.io/kube-vip/kube-vip:$KVVERSION vip /kube-vip"
+              #  # kube-vip manifest pod --interface $INTERFACE --address $VIP --controlplane --arp --leaderElection | sudo tee /etc/kubernetes/manifests/kube-vip.yaml
+
+      - name: Copy Generated kube-vip manifest to localhost
+        ansible.builtin.fetch:
+            src: /etc/kubernetes/manifests/kube-vip.yaml
+            dest: files/kube-vip.yaml
+            flat: true
+
+      # TODO ok, this is weird, but it might work.  Maybe a timer too?
+      # Otherwise, we may need to implement a retry mechanism ala kubeadm reset, delete cni... actually lets do that anyway
+      - name: Copy Generated Kube-VIP manifest to Controller Node
+        copy: src=files/kube-vip.yaml dest=/etc/kubernetes/manifests/kube-vip.yaml mode=0777
 
 
       # - name: Delete cni folder
@@ -86,7 +116,8 @@
             dest: ./kubeadm-config.yaml
 
       - name: Apply Kubeadm Config
-        ansible.builtin.command: sudo kubeadm init --v=6 --config kubeadm-config.yaml
+        #ansible.builtin.command: sudo kubeadm init --v=6 --config kubeadm-config.yaml
+        ansible.builtin.command: sudo kubeadm init --v=6 --config kubeadm-config.yaml --upload-certs
         environment:
             # TODO these env variables are probably not needed.  They used to be used in the command line arguments
             IPADDR: "{{ ip_result.stdout }}"
@@ -95,13 +126,13 @@
       - name: Setup kubeconfig for user
         command: "{{ item }}"
         with_items:
-            - mkdir -p /home/gemini/.kube
-            - cp -i /etc/kubernetes/admin.conf /home/gemini/.kube/config
-            - chown gemini:gemini /home/gemini/.kube/config
+            - mkdir -p /home/cancer/.kube
+            - cp -i /etc/kubernetes/admin.conf /home/cancer/.kube/config
+            - chown cancer:cancer /home/cancer/.kube/config
 
       - name: Apply Flannel Manifest
-        command: kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml --kubeconfig=/home/gemini/.kube/config
-        # command: sudo kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.20.2/Documentation/kube-flannel.yml --kubeconfig=/home/gemini/.kube/config
+        command: kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml --kubeconfig=/home/cancer/.kube/config
+        # command: sudo kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.20.2/Documentation/kube-flannel.yml --kubeconfig=/home/cancer/.kube/config
         retries: 10
         delay: 10
         register: result
@@ -119,9 +150,9 @@
 
       - name: Copy Kubernetes Credentials to HOME
         ansible.builtin.fetch:
-            src: /home/gemini/.kube/config
+            src: /home/cancer/.kube/config
             dest: kube-config
-            flat: yes
+            flat: true
 
       - name: CHOWN Kubernetes Credentials
         delegate_to: localhost
@@ -130,35 +161,37 @@
             owner: "{{ localuser }}"
             group: "{{ localuser }}"
 
+## Secondary Master Node(s) setup
+- hosts: secondarycontrollers
+  become: true
+  remote_user: cancer
+  tasks:
+      - name: Ensure Manifests Directory on Secondary Controllers
+        ansible.builtin.file:
+            path: /etc/kubernetes/manifests
+            state: directory
+            mode: '0755'
+
+      - name: Copy Generated Kube-VIP manifest to Controller Node
+        copy: src=files/kube-vip.yaml dest=/etc/kubernetes/manifests/kube-vip.yaml mode=0777
+
+      - name: Copy Join Command To Controller Node
+        copy: src=join-command-controller dest=/tmp/join-command.sh mode=0777
+
+      - name: Join the Node to the Cluster
+        ansible.builtin.command: sh /tmp/join-command.sh
+
+
 # Worker Node Specific Setup
 - hosts: workers
   become: yes
-  remote_user: gemini
+  remote_user: cancer
   tasks:
       - name: Copy Join Command To Worker Node
         copy: src=join-command-worker dest=/tmp/join-command.sh mode=0777
 
       - name: Join the Node to the Cluster
         ansible.builtin.command: sh /tmp/join-command.sh
-
-# # Install MetalLB
-# - hosts: localhost
-#   become: yes
-#   become_user: ansible
-#   tasks:
-#       - name: Apply MetalLB Manifest
-#         ansible.builtin.command: kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.3/config/manifests/metallb-native.yaml
-#
-#       - name: Wait for MetalLB Pods to become ready
-#         ansible.builtin.shell: "kubectl get pods --kubeconfig=/home/ansible/.kube/config -n metallb-system -o custom-columns=NAMESPACE:metadata.namespace,POD:metadata.name,PodIP:status.podIP,READY-true:status.containerStatuses[*].ready"
-#         retries: 10
-#         delay: 10
-#         register: metallb_result
-#         until: metallb_result.stdout.find("false") == -1
-#
-#       - name: Configure MetalLB
-#         ansible.builtin.command: kubectl apply -f files/metallb_deployment_l2.yaml
-
 
 # Install Age, Go-Task, pre-commit
 - hosts: localhost
