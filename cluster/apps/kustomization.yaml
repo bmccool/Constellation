@@ -11,9 +11,9 @@ resources:
   #- lidarr
   #- lidarr-transmission
   #- mealie
-  #- monitoring
+  - monitoring
   - minecraft
-  #- nexus
+  - nexus
   - podinfo
   #- radarr-transmission
   #- readarr
