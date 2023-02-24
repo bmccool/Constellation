@@ -17,7 +17,7 @@ metadata:
     # traefik.ingress.kubernetes.io/router.middlewares:your-middleware@kubernetescrd
 spec:
   rules:
-    - host: "uptime-kuma.gemini.brendonmccool.com"  # Your hostname
+    - host: "uptime-kuma.cancer.brendonmccool.com"  # Your hostname
       http:
         paths:
         # Path-based routing settings:

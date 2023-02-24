@@ -42,7 +42,7 @@ spec:
 #
 #spec:
 #  rules:
-#    - host: "minecraft.gemini.brendonmccool.com"  # Your hostname
+#    - host: "minecraft.cancer.brendonmccool.com"  # Your hostname
 #      http:
 #        paths:
 #        # Path-based routing settings:
@@ -79,7 +79,7 @@ metadata:
     # traefik.ingress.kubernetes.io/router.middlewares:your-middleware@kubernetescrd
 spec:
   rules:
-    - host: "minecraft-rcon.gemini.brendonmccool.com"  # Your hostname
+    - host: "minecraft-rcon.cancer.brendonmccool.com"  # Your hostname
       http:
         paths:
         # Path-based routing settings:
