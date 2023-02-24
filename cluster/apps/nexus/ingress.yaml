@@ -6,7 +6,7 @@ metadata:
   annotations:
 spec:
   rules:
-    - host: "nexus.gemini.brendonmccool.com"  # Your hostname
+    - host: "nexus.cancer.brendonmccool.com"  # Your hostname
       http:
         paths:
         # Path-based routing settings:
@@ -26,7 +26,7 @@ metadata:
   annotations:
 spec:
   rules:
-    - host: "nexus-containers.gemini.brendonmccool.com"  # Your hostname
+    - host: "nexus-containers.cancer.brendonmccool.com"  # Your hostname
       http:
         paths:
         # Path-based routing settings:
