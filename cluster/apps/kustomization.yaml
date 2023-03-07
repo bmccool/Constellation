@@ -13,7 +13,7 @@ resources:
   #- mealie
   - monitoring
   - minecraft
-  - nexus
+  #- nexus
   - podinfo
   #- radarr-transmission
   #- readarr
