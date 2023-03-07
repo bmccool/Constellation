@@ -2,14 +2,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
 metadata:
-  name: apps
+  name: infrastructure
   namespace: flux-system
 spec:
   interval: 10m
   dependsOn:
-    - name: infrastructure
-  # Path to apps directory from flux directory TODO why two dots?
-  path: ./cluster/apps
+    - name: core
+  # Path to infrastructure directory from flux directory
+  path: ./cluster/infrastructure
   prune: true
   sourceRef:
     kind: GitRepository
@@ -18,9 +18,3 @@ spec:
     provider: sops
     secretRef:
       name: sops-age
-  #postBuild:
-  #  substituteFrom:
-  #    - kind: ConfigMap
-  #      name: cluster-settings
-  #    - kind: Secret
-  #      name: cluster-secrets
