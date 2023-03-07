@@ -26,3 +26,5 @@
     file may be overwritten on startup, in which case there are other base files to edit that this one is
     built from at boot.
 3. package "sudo" installed on pve node, along with user created which will be able to ssh and run commands.
+4. kubectl installed on the localhost
+5. SSH access to github.com/bmccool/Constellation via ~/.ssh/id_rsa and .pub files
