@@ -47,7 +47,7 @@ spec:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /mnt/k8s/cancer/nexus
+        path: /mnt/k8s/capricorn/nexus
 
     podSecurityContext:
       fsGroup: 200

@@ -16,7 +16,7 @@
 #  gather_facts: no
 #  become: yes
 #  #TODO dynamic
-#  remote_user: cancer
+#  remote_user: capricorn
 #  tasks:
 #      - name: Wait For New VMs
 #        ansible.builtin.wait_for_connection:

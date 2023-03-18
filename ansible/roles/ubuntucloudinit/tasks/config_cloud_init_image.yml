@@ -38,7 +38,7 @@
     - name: Dump SSH key to file
       ansible.builtin.copy:
         # TODO this should be dynamic based on ciuser
-        dest: ~/.ssh/cancer.rsa.pub
+        dest: ~/.ssh/capricorn.rsa.pub
         content: "{{ ssh_keys.stdout }}"
 
 - name: Configure Cloud Init Options
@@ -64,4 +64,4 @@
       # TODO Remove comment once confirmed working
       - "{{ searchdomain }}"
       - --sshkeys
-      - ~/.ssh/cancer.rsa.pub
+      - ~/.ssh/capricorn.rsa.pub
