@@ -1,15 +1,15 @@
 [controllers]
-cancer-ctrl-[1:3]
+capricorn-ctrl-[1:3]
 
 [maincontroller]
-cancer-ctrl-1
+capricorn-ctrl-1
 
 [secondarycontrollers]
-cancer-ctrl-2
-cancer-ctrl-3
+capricorn-ctrl-2
+capricorn-ctrl-3
 
 [workers]
-cancer-work-[1:2]
+capricorn-work-[1:2]
 
 [proxmox]
-pve-cancer
+pve-capricorn

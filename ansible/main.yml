@@ -32,7 +32,7 @@
   gather_facts: false
   become: true
   # TODO dynamic
-  remote_user: cancer
+  remote_user: capricorn
   tasks:
       - name: Wait For New VMs
         ansible.builtin.wait_for_connection:
@@ -41,17 +41,17 @@
         debug:
             msg: "Hooray!"
 
-# Cancer Node Setup
+# Capricorn Node Setup
 - hosts: controllers:workers
   become: true
-  remote_user: cancer
+  remote_user: capricorn
   roles:
       - role: installk8s
 
 # Master Node Specific Setup
 - hosts: maincontroller
   become: true
-  remote_user: cancer
+  remote_user: capricorn
   tasks:
       - name: Get IP Address
         ansible.builtin.shell: "ip address show eth0 | grep 'inet ' | awk '{ print $2 }' | cut -d '/' -f1"
@@ -127,13 +127,13 @@
       - name: Setup kubeconfig for user
         command: "{{ item }}"
         with_items:
-            - mkdir -p /home/cancer/.kube
-            - cp -i /etc/kubernetes/admin.conf /home/cancer/.kube/config
-            - chown cancer:cancer /home/cancer/.kube/config
+            - mkdir -p /home/capricorn/.kube
+            - cp -i /etc/kubernetes/admin.conf /home/capricorn/.kube/config
+            - chown capricorn:capricorn /home/capricorn/.kube/config
 
       - name: Apply Flannel Manifest
-        command: kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml --kubeconfig=/home/cancer/.kube/config
-        # command: sudo kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.20.2/Documentation/kube-flannel.yml --kubeconfig=/home/cancer/.kube/config
+        command: kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml --kubeconfig=/home/capricorn/.kube/config
+        # command: sudo kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.20.2/Documentation/kube-flannel.yml --kubeconfig=/home/capricorn/.kube/config
         retries: 10
         delay: 10
         register: result
@@ -151,7 +151,7 @@
 
       - name: Copy Kubernetes Credentials to HOME
         ansible.builtin.fetch:
-            src: /home/cancer/.kube/config
+            src: /home/capricorn/.kube/config
             dest: files/kube-config
             flat: true
 
@@ -165,7 +165,7 @@
 ## Secondary Master Node(s) setup
 - hosts: secondarycontrollers
   become: true
-  remote_user: cancer
+  remote_user: capricorn
   tasks:
       - name: Ensure Manifests Directory on Secondary Controllers
         ansible.builtin.file:
@@ -186,7 +186,7 @@
 # Worker Node Specific Setup
 - hosts: workers
   become: yes
-  remote_user: cancer
+  remote_user: capricorn
   tasks:
       - name: Copy Join Command To Worker Node
         copy: src=join-command-worker dest=/tmp/join-command.sh mode=0777
@@ -248,6 +248,12 @@
       - name: Ensure Age Key Directory
         ansible.builtin.file:
             path: ~/.config/sops/age
+            state: directory
+            mode: '0755'
+
+      - name: Ensure Cluster Directory
+        ansible.builtin.file:
+            path: "{{ cluster_path }}"
             state: directory
             mode: '0755'
 

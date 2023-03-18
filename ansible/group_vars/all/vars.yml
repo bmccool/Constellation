@@ -2,18 +2,18 @@
 cloud_init_id: 9000
 
 first-controller:
-  - cancer-ctrl-1
+  - capricorn-ctrl-1
 secondary-controllers:
-  - cancer-ctrl-2
-  - cancer-ctrl-3
+  - capricorn-ctrl-2
+  - capricorn-ctrl-3
 
 controllers:
-  - cancer-ctrl-1
-  - cancer-ctrl-2
-  - cancer-ctrl-3
+  - capricorn-ctrl-1
+  - capricorn-ctrl-2
+  - capricorn-ctrl-3
 workers:
-  - cancer-work-1
-  - cancer-work-2
+  - capricorn-work-1
+  - capricorn-work-2
 
 worker:
   disk_size_gb:
@@ -31,10 +31,10 @@ controller:
   #/home/ansible/ha-test
   #/home/ansible/taurusk8s/fleet-infra
 
-cluster_friendly_name: Cancer
-cluster_path: /workspaces/Constellation/cluster
-ciuser: cancer
-cipassword: cancer
+cluster_friendly_name: Capricorn
+cluster_path: /home/brendon/Constellation/cluster
+ciuser: capricorn
+cipassword: capricorn
 
 controlplane_endpoint_ipaddress: "10.208.100.19"
 # Also not referenced from this file, files/kube-vip.yaml and init_kubelet.yaml
@@ -45,7 +45,7 @@ pod_network_cidr: 10.244.0.0/16
 nameserver: 10.208.100.1
 searchdomain: brendonmccool.com
 
-localuser: vscode
+localuser: brendon
 
 #k8s_version: 1.25.5-00
 k8s_version: 1.24.3-00
