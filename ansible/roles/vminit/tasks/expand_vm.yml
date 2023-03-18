@@ -1,0 +1,12 @@
+---
+#expand_vm.yml
+  # TODO This is copied from destroy_vm.yml
+- name: Get VMID for {{ item }}
+  ansible.builtin.shell: "sudo /usr/sbin/qm list | grep {{ item }} | awk '{ print $1 }'"
+  register: vmid_result
+
+- name: Expand VM Disk {{ item }}
+  ansible.builtin.command: "sudo /usr/sbin/qm resize {{ vmid_result.stdout }} scsi0 {{ disk_size_gb }}G"
+
+- name: Expand VM Memory {{ item }}
+  ansible.builtin.command: "sudo /usr/sbin/qm set {{ vmid_result.stdout }} -memory {{ mem_size_mb }}"
