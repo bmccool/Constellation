@@ -5,6 +5,7 @@ resources:
   #- artifactory-ce
   #- calibre
   #- calibre-web
+  - dashy
   #- general-transmission
   #- jdownloader-2
   #- jenkins
