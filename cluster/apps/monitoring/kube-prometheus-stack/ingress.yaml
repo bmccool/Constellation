@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: kps-grafana-ingress
-  namespace: default
+  namespace: monitoring
 spec:
   rules:
     - host: "kps-grafana.capricorn.brendonmccool.com"  # Your hostname
