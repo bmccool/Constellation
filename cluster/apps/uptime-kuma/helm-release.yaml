@@ -27,7 +27,7 @@ spec:
       type: Recreate
 
     env:
-      TZ: "America/New York"
+      TZ: "America/New_York"
     service:
       main:
         ports:
