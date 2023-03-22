@@ -17,7 +17,7 @@ workers:
 
 worker:
   disk_size_gb:
-    8
+    24
   mem_size_mb:
     4096
 controller:

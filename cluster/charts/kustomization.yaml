@@ -12,7 +12,7 @@ resources:
   #- external-dns-charts.yaml
   #- fairwinds-charts.yaml
   #- gitea-charts.yaml
-  #- grafana-charts.yaml
+  - grafana-charts.yaml
   #- ingress-nginx-charts.yaml
   #- jetstack-charts.yaml
   - jenkins-charts.yaml
