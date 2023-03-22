@@ -18,8 +18,8 @@ spec:
   values:
     env:
       TZ: "America/New York"
-    persistence:
-      data:
-        enabled: true
-        mountPath: /app/data
-        existingClaim: uptime-kuma-config
+    #persistence:
+    #  data:
+    #    enabled: true
+    #    mountPath: /app/data
+    #    existingClaim: uptime-kuma-config
