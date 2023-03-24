@@ -24,20 +24,10 @@ spec:
           # This comes from minio web interface / access-keys
           access_key: '2RmGgy7DuuUwscLv'
           secret_key: '24IA2Vq2VhZ4PwmdDCv938jW3RJtqirJ'
+          # I created this bucket too
           bucket: 'tempo-traces'
           endpoint: 'minio.brendonmccool.com:9000'
           insecure: true
-    minio:
-      enabled: true
-      mode: standalone
-      rootUser: root
-      rootPassword: sdfwer234
-      buckets:
-        # Default Tempo storage bucket.
-        # Note: I did not create this via minio web interface
-        - name: tempo-traces
-          policy: none
-          purge: false
     traces:
       otlp:
         grpc:
