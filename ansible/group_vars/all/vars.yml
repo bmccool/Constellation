@@ -17,14 +17,14 @@ workers:
 
 worker:
   disk_size_gb:
-    24
+    64
   mem_size_mb:
-    4096
+    16384
 controller:
   disk_size_gb:
     8
   mem_size_mb:
-    2048
+    4096
 
 # OLD
 #cluster_name:
