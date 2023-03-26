@@ -1,0 +1,44 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: otel-collector
+  namespace: monitoring
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: opentelemetry-collector
+      version: 0.51.0
+      sourceRef:
+        kind: HelmRepository
+        name: open-telemetry-charts
+        namespace: flux-system
+      interval: 15m
+
+  values:
+    mode: daemonset
+    config:
+      exporters:
+        otlp:
+          endpoint: tempo-distributor:4317
+          tls:
+            insecure: true
+      service:
+        pipelines:
+          logs:
+            exporters:
+              - otlp
+              - logging
+          metrics:
+            exporters:
+              - otlp
+              - logging
+          traces:
+            exporters:
+              - otlp
+              - logging
+    #resources:
+    #  limits:
+    #    cpu: 100m
+    #    memory: 200M
