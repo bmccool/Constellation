@@ -20,6 +20,8 @@ spec:
     mode: daemonset
     config:
       exporters:
+        logging:
+          loglevel: debug
         otlp:
           endpoint: tempo-distributor:4317
           tls:
@@ -30,14 +32,20 @@ spec:
             exporters:
               - otlp
               - logging
+            receivers:
+              - otlp
           metrics:
             exporters:
               - otlp
               - logging
+            receivers:
+              - otlp
           traces:
             exporters:
               - otlp
               - logging
+            receivers:
+              - otlp
     #resources:
     #  limits:
     #    cpu: 100m
