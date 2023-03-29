@@ -40,19 +40,19 @@ spec:
         pipelines:
           logs:
             exporters:
-              - otlp
+              #- otlp
               - logging
             receivers:
               - otlp
           metrics:
             exporters:
-              - otlp
+              #- otlp
               - logging
             receivers:
               - otlp
           traces:
             exporters:
-              - otlp
+              #- otlp
               - logging
             receivers:
               - otlp
