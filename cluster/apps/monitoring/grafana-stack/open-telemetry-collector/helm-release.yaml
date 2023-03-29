@@ -34,6 +34,10 @@ spec:
       #     tls:
       #       insecure: true
       # service:
+      service:
+        telemetry:
+          logs:
+            level: "debug"
       #   pipelines:
       #     logs:
       #       exporters:
