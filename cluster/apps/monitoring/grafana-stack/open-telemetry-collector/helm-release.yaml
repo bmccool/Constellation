@@ -19,43 +19,40 @@ spec:
   values:
     mode: deployment
     config:
-      extensions:
-        zpages:
-          endpoint: 0.0.0.0:55679
-      receivers:
-        otlp:
-          protocols:
-            grpc:
-              endpoint: 0.0.0.0:4317
-            http:
-              endpoint: 0.0.0.0:4318
-      exporters:
-        logging:
-          verbosity: detailed
-        otlp:
-          endpoint: tempo-distributor:4317
-          tls:
-            insecure: true
-      service:
-        pipelines:
-          logs:
-            exporters:
-              #- otlp
-              - logging
-            receivers:
-              - otlp
-          metrics:
-            exporters:
-              #- otlp
-              - logging
-            receivers:
-              - otlp
-          traces:
-            exporters:
-              #- otlp
-              - logging
-            receivers:
-              - otlp
+      # receivers:
+      #   otlp:
+      #     protocols:
+      #       grpc:
+      #         endpoint: 0.0.0.0:4317
+      #       http:
+      #         endpoint: 0.0.0.0:4318
+      # exporters:
+      #   logging:
+      #     verbosity: detailed
+      #   otlp:
+      #     endpoint: tempo-distributor:4317
+      #     tls:
+      #       insecure: true
+      # service:
+      #   pipelines:
+      #     logs:
+      #       exporters:
+      #         #- otlp
+      #         - logging
+      #       receivers:
+      #         - otlp
+      #     metrics:
+      #       exporters:
+      #         #- otlp
+      #         - logging
+      #       receivers:
+      #         - otlp
+      #     traces:
+      #       exporters:
+      #         #- otlp
+      #         - logging
+      #       receivers:
+      #         - otlp
     #resources:
     #  limits:
     #    cpu: 100m
