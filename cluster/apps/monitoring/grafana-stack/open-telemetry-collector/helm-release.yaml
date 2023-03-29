@@ -17,7 +17,7 @@ spec:
       interval: 15m
 
   values:
-    mode: daemonset
+    mode: deployment
     config:
       exporters:
         logging:
