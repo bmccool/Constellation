@@ -31,7 +31,7 @@ spec:
               endpoint: 0.0.0.0:4318
       exporters:
         logging:
-          verbosity: debug
+          verbosity: detailed
         otlp:
           endpoint: tempo-distributor:4317
           tls:
