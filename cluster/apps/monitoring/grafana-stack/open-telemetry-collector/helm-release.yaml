@@ -19,6 +19,9 @@ spec:
   values:
     mode: deployment
     config:
+    extensions:
+      zpages:
+        endpoint: 0.0.0.0:55679
       receivers:
         otlp:
           protocols:
@@ -28,7 +31,7 @@ spec:
               endpoint: 0.0.0.0:4318
       exporters:
         logging:
-          loglevel: debug
+          verbosity: debug
         otlp:
           endpoint: tempo-distributor:4317
           tls:
