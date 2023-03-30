@@ -30,8 +30,10 @@ spec:
           endpoint: 'minio.brendonmccool.com:9000'
           insecure: true
     read:
+      replicas: 2
       persistence:
         storageClass: nfs-client
     write:
+      replicas: 2
       persistence:
         storageClass: nfs-client
