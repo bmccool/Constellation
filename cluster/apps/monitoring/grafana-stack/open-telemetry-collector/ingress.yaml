@@ -5,7 +5,7 @@ metadata:
   namespace: monitoring
 spec:
   rules:
-    - host: "otel-rec-http.capricorn.brendonmccool.com"  # Your hostname
+    - host: "otel-rec.capricorn.brendonmccool.com"  # Your hostname
       http:
         paths:
         # Path-based routing settings:
