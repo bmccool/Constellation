@@ -29,3 +29,9 @@ spec:
           secretAccessKey: '24IA2Vq2VhZ4PwmdDCv938jW3RJtqirJ'
           endpoint: 'minio.brendonmccool.com:9000'
           insecure: true
+    read:
+      persistence:
+        storageClass: nfs-client
+    write:
+      persistence:
+        storageClass: nfs-client
