@@ -1,11 +1,11 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: otel-rec-grpc
+  name: otel-rec-http-ingress
   namespace: monitoring
 spec:
   rules:
-    - host: "otel-rec-grpc.capricorn.brendonmccool.com"  # Your hostname
+    - host: "otel-rec-http.capricorn.brendonmccool.com"  # Your hostname
       http:
         paths:
         # Path-based routing settings:
@@ -15,4 +15,4 @@ spec:
               service:
                 name: otel-collector-opentelemetry-collector  # The name of the service
                 port:
-                  number: 4317  # Service Portnumber
+                  number: 4318  # Service Portnumber

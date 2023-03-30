@@ -19,6 +19,8 @@ spec:
   values:
     mode: deployment
     config:
+      extensions:
+        zpages:
       receivers:
         jaeger:
           protocols:
@@ -40,23 +42,20 @@ spec:
               endpoint: "0.0.0.0:4318"
         zipkin:
           endpoint: "0.0.0.0:9411"
-      #exporters:
-      #  logging:
-      #    verbosity: detailed
-      # service:
-      # service:
-      #   telemetry:
-      #     logs:
-      #       level: "debug"
+      exporters:
+        otlp:
+          endpoint: tempo-distributor:4317
+          tls:
+            insecure: true
       service:
         pipelines:
           traces:
             receivers: [otlp]
             processors: []
-            exporters: [logging]
+            exporters: [logging, otlp]
         telemetry:
           logs:
-            level: debug
+            level: info
       #   pipelines:
       #     logs:
       #       exporters:
