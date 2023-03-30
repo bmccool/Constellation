@@ -44,10 +44,19 @@ spec:
       #  logging:
       #    verbosity: detailed
       # service:
+      # service:
+      #   telemetry:
+      #     logs:
+      #       level: "debug"
       service:
+        pipelines:
+          traces:
+            receivers: [otlp]
+            processors: []
+            exporters: [logging]
         telemetry:
           logs:
-            level: "debug"
+            level: debug
       #   pipelines:
       #     logs:
       #       exporters:
