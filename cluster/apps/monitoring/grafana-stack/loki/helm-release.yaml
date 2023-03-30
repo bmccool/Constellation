@@ -1,0 +1,31 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: loki
+  namespace: monitoring
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: loki
+      version: 4.10.0
+      sourceRef:
+        kind: HelmRepository
+        name: grafana-charts
+        namespace: flux-system
+      interval: 15m
+
+  values:
+    loki:
+      storage:
+        type: s3
+        bucketNames:
+          # I created this bucket too
+          loki-logs: loki-logs
+        s3:
+          # This comes from minio web interface / access-keys
+          accessKeyId: '2RmGgy7DuuUwscLv'
+          secretAccessKey: '24IA2Vq2VhZ4PwmdDCv938jW3RJtqirJ'
+          endpoint: 'minio.brendonmccool.com:9000'
+          insecure: true
