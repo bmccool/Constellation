@@ -14,6 +14,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: tempo-distributor  # The name of the service
+                name: loki-gateway  # The name of the service
                 port:
-                  number: 4317  # Service Portnumber
+                  number: 80  # Service Portnumber

@@ -21,8 +21,10 @@ spec:
       storage:
         type: s3
         bucketNames:
-          # I created this bucket too
-          loki-logs: loki-logs
+          # I created these buckets too
+          chunks: chunks
+          admin: admin
+          ruler: ruler
         s3:
           # This comes from minio web interface / access-keys
           accessKeyId: '2RmGgy7DuuUwscLv'
