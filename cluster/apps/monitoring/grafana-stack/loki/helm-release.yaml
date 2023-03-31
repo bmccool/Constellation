@@ -33,9 +33,9 @@ spec:
           # This comes from minio web interface / access-keys
           accessKeyId: '2RmGgy7DuuUwscLv'
           secretAccessKey: '24IA2Vq2VhZ4PwmdDCv938jW3RJtqirJ'
-          #endpoint: 'minio.brendonmccool.com:9000'
-          endpoint: 192.168.8.128:9000
+          endpoint: 'minio.brendonmccool.com:9000'
           insecure: true
+          s3forcepathstyle: true
     read:
       replicas: 2
       persistence:
