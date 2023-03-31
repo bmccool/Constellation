@@ -35,7 +35,7 @@ spec:
           secretAccessKey: '24IA2Vq2VhZ4PwmdDCv938jW3RJtqirJ'
           endpoint: 'minio.brendonmccool.com:9000'
           insecure: true
-          s3forcepathstyle: true
+          s3ForcePathStyle: true
     read:
       replicas: 2
       persistence:
