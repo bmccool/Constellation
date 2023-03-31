@@ -51,31 +51,8 @@ spec:
         pipelines:
           traces:
             receivers: [otlp]
-            processors: []
+            processors: [memory_limiter, batch]
             exporters: [logging, otlp]
         telemetry:
           logs:
             level: info
-      #   pipelines:
-      #     logs:
-      #       exporters:
-      #         #- otlp
-      #         - logging
-      #       receivers:
-      #         - otlp
-      #     metrics:
-      #       exporters:
-      #         #- otlp
-      #         - logging
-      #       receivers:
-      #         - otlp
-      #     traces:
-      #       exporters:
-      #         #- otlp
-      #         - logging
-      #       receivers:
-      #         - otlp
-    #resources:
-    #  limits:
-    #    cpu: 100m
-    #    memory: 200M
