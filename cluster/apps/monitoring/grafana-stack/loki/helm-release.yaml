@@ -19,8 +19,8 @@ spec:
   values:
     loki:
       server:
-        grpc_server_max_recv_msg_size: 8288608
-        grpc_server_max_send_msg_size: 8288608
+        grpc_server_max_recv_msg_size: 8389000
+        grpc_server_max_send_msg_size: 8389000
       auth_enabled: false
       storage:
         type: s3

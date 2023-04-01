@@ -17,6 +17,15 @@ spec:
       interval: 15m
 
   values:
+    server:
+      grpc_server_max_recv_msg_size: 8389000
+      grpc_server_max_send_msg_size: 8389000
+    querier:
+      config:
+        frontend_worker:
+          gprc_client_config:
+            max_send_msg_size: 8389000
+
     storage:
       trace:
         backend: s3
@@ -32,6 +41,7 @@ spec:
       otlp:
         grpc:
           enabled: true
+          max_recv_msg_size_mib: 8
         http:
           enabled: true
       zipkin:
