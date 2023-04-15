@@ -37,10 +37,11 @@ spec:
           insecure: true
           s3ForcePathStyle: true
     read:
-      replicas: 2
-      persistence:
-        storageClass: nfs-client
+      replicas: 1
+      #persistence:
+      #  storageClass: nfs-client
+
     write:
-      replicas: 2
-      persistence:
-        storageClass: nfs-client
+      replicas: 1
+      #persistence:
+      #  storageClass: nfs-client
