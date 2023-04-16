@@ -19,7 +19,7 @@ spec:
   values:
     loki:
       commonConfig:
-        replication_factor: 1
+        replication_factor: 2
       server:
         grpc_server_max_recv_msg_size: 8389000
         grpc_server_max_send_msg_size: 8389000
@@ -39,9 +39,7 @@ spec:
           insecure: true
           s3ForcePathStyle: true
     singleBinary:
-      replicas: 1
-      persistence:
-        storageClass: nfs-client
+      replicas: 2
     #read:
     #  replicas: 2
     #  #persistence:
