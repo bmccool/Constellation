@@ -18,6 +18,8 @@ spec:
 
   values:
     loki:
+      commonConfig:
+        replication_factor: 1
       server:
         grpc_server_max_recv_msg_size: 8389000
         grpc_server_max_send_msg_size: 8389000
@@ -36,12 +38,14 @@ spec:
           endpoint: 'minio.brendonmccool.com:9000'
           insecure: true
           s3ForcePathStyle: true
-    read:
-      replicas: 2
-      #persistence:
-      #  storageClass: nfs-client
-
-    write:
-      replicas: 2
-      #persistence:
-      #  storageClass: nfs-client
+    singleBinary:
+      replicas: 1
+    #read:
+    #  replicas: 2
+    #  #persistence:
+    #  #  storageClass: nfs-client
+    #
+    #write:
+    #  replicas: 2
+    #  #persistence:
+    #  #  storageClass: nfs-client
