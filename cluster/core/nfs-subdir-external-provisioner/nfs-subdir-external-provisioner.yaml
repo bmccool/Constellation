@@ -24,3 +24,5 @@ spec:
       server: NFS.brendonmccool.com
       # TODO Make dyamic
       path: /mnt/k8s/capricorn
+    storageClass:
+      defaultClass: true
