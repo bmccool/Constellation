@@ -40,6 +40,8 @@ spec:
           s3ForcePathStyle: true
     singleBinary:
       replicas: 1
+      persistence:
+        storageClass: nfs-client
     #read:
     #  replicas: 2
     #  #persistence:
