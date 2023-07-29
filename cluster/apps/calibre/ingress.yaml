@@ -18,7 +18,7 @@ metadata:
     # traefik.ingress.kubernetes.io/router.middlewares:your-middleware@kubernetescrd
 spec:
   rules:
-    - host: "calibre.taurus.brendonmccool.com"  # Your hostname
+    - host: "calibre.capricorn.brendonmccool.com"  # Your hostname
       http:
         paths:
         # Path-based routing settings:
@@ -54,7 +54,7 @@ metadata:
     # traefik.ingress.kubernetes.io/router.middlewares:your-middleware@kubernetescrd
 spec:
   rules:
-    - host: "calibre-cs.taurus.brendonmccool.com"  # Your hostname
+    - host: "calibre-cs.capricorn.brendonmccool.com"  # Your hostname
       http:
         paths:
         # Path-based routing settings:

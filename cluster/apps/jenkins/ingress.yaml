@@ -6,7 +6,7 @@ metadata:
   annotations:
 spec:
   rules:
-    - host: "jenkins.taurus.brendonmccool.com"  # Your hostname
+    - host: "jenkins.capricorn.brendonmccool.com"  # Your hostname
       http:
         paths:
         # Path-based routing settings:
@@ -26,7 +26,7 @@ spec:
 #  annotations:
 #spec:
 #  rules:
-#    - host: "jenkins.taurus.brendonmccool.com"  # Your hostname
+#    - host: "jenkins.capricorn.brendonmccool.com"  # Your hostname
 #      http:
 #        paths:
 #        # Path-based routing settings:

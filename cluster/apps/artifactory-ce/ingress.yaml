@@ -6,7 +6,7 @@ metadata:
   annotations:
 spec:
   rules:
-    - host: "artifactory-ce.taurus.brendonmccool.com"  # Your hostname
+    - host: "artifactory-ce.capricorn.brendonmccool.com"  # Your hostname
       http:
         paths:
         # Path-based routing settings:
@@ -26,7 +26,7 @@ metadata:
   annotations:
 spec:
   rules:
-    - host: "artifactory-ce-api.taurus.brendonmccool.com"  # Your hostname
+    - host: "artifactory-ce-api.capricorn.brendonmccool.com"  # Your hostname
       http:
         paths:
         # Path-based routing settings:
