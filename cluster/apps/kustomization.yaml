@@ -22,5 +22,5 @@ resources:
   - sonarr-transmission
   - unpackerr
   - uptime-kuma
-  - networking
+  #- networking
   - sheetable
