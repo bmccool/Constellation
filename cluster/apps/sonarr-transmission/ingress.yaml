@@ -17,7 +17,7 @@ metadata:
     # traefik.ingress.kubernetes.io/router.middlewares:your-middleware@kubernetescrd
 spec:
   rules:
-    - host: "sonarr-transmission.taurus.brendonmccool.com"  # Your hostname
+    - host: "sonarr-transmission.capricorn.brendonmccool.com"  # Your hostname
       http:
         paths:
         # Path-based routing settings:
