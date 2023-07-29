@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: artifactory-ce-ingress
+  namespace: artifactory-ce-ns
+  annotations:
+spec:
+  rules:
+    - host: "artifactory-ce.taurus.brendonmccool.com"  # Your hostname
+      http:
+        paths:
+        # Path-based routing settings:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: artifactory-ce  # The name of the service
+                port:
+                  number: 8082  # Service Portnumber
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: artifactory-ce-api-ingress
+  namespace: artifactory-ce-ns
+  annotations:
+spec:
+  rules:
+    - host: "artifactory-ce-api.taurus.brendonmccool.com"  # Your hostname
+      http:
+        paths:
+        # Path-based routing settings:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: artifactory-ce  # The name of the service
+                port:
+                  number: 8081  # Service Portnumber
