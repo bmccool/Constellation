@@ -30,7 +30,7 @@ spec:
       tag: "v2.10.4"
       # -- Traefik image pull policy
       pullPolicy: IfNotPresent
-      additionalArguments:
+      #additionalArguments:
       # Configure your CertificateResolver here...
       #
       # HTTP Challenge
