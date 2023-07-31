@@ -75,22 +75,23 @@ spec:
       #  - --certificatesresolvers.generic.acme.email=your-email@example.com
       #  - --certificatesresolvers.generic.acme.storage=/ssl-certs/acme-generic.json
 
-    certResolvers:
-      letsencrypt:
-        # for challenge options cf. https://doc.traefik.io/traefik/https/acme/
-        email: brendonmccool@gmail.com
-        dnsChallenge:
-          # also add the provider's required configuration under env
-          # or expand then from secrets/configmaps with envfrom
-          # cf. https://doc.traefik.io/traefik/https/acme/#providers
-          provider: cloudflare
-          # add futher options for the dns challenge as needed
-          # cf. https://doc.traefik.io/traefik/https/acme/#dnschallenge
-          #delayBeforeCheck: 30
-          #resolvers:
-          #  - 1.1.1.1
-          #  - 8.8.8.8
-        storage: /ssl-certs/acme-cloudflare.json
+    #certificateResolvers:
+    #
+    #  letsencrypt:
+    #    # for challenge options cf. https://doc.traefik.io/traefik/https/acme/
+    #    email: brendonmccool@gmail.com
+    #    dnsChallenge:
+    #      # also add the provider's required configuration under env
+    #      # or expand then from secrets/configmaps with envfrom
+    #      # cf. https://doc.traefik.io/traefik/https/acme/#providers
+    #      provider: cloudflare
+    #      # add futher options for the dns challenge as needed
+    #      # cf. https://doc.traefik.io/traefik/https/acme/#dnschallenge
+    #      #delayBeforeCheck: 30
+    #      #resolvers:
+    #      #  - 1.1.1.1
+    #      #  - 8.8.8.8
+    #    storage: /ssl-certs/acme-cloudflare.json
 
 
     additionalArguments:
@@ -101,10 +102,10 @@ spec:
       #- --certificatesresolvers.cloudflare.acme.email=mail@example.com
       #- --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1
       #- --certificatesresolvers.cloudflare.acme.storage=/certs/acme.json
-      #- --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
-      #- --certificatesresolvers.cloudflare.acme.email=brendonmccool@gmail.com
-      #- --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1
-      #- --certificatesresolvers.cloudflare.acme.storage=/ssl-certs/acme-cloudflare.json
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.cloudflare.acme.email=brendonmccool@gmail.com
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1
+      - --certificatesresolvers.cloudflare.acme.storage=/ssl-certs/acme-cloudflare.json
 
     ports:
       minecraft:
