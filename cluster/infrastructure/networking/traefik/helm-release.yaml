@@ -157,6 +157,15 @@ spec:
         # TODO make dyamic
         loadBalancerIP: 10.208.100.18
 
+    deployment:
+      initContainers:
+        - name: volume-permissions
+          image: busybox:1.31.1
+          command: ["sh", "-c", "chmod -Rv 600 /ssl-certs/*"]
+          volumeMounts:
+            - name: ssl-certs
+              mountPath: /ssl-certs
+
     #ingressClass:
     #  enabled: true
     #  isDefaultClass: true
