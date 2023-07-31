@@ -136,6 +136,11 @@ spec:
       dashboard:
         enabled: false
 
+    # Set Traefik as your default Ingress Controller, according to Kubernetes 1.19+ changes.
+    ingressClass:
+      enabled: true
+      isDefaultClass: true
+
     persistence:
       enabled: true
       name: ssl-certs
@@ -146,8 +151,12 @@ spec:
       general:
         level: INFO #ERROR
 
+    service:
+      spec:
+        externalTrafficPolicy: Local
+        # TODO make dyamic
+        loadBalancerIP: 10.208.100.18
 
-    # Set Traefik as your default Ingress Controller, according to Kubernetes 1.19+ changes.
     #ingressClass:
     #  enabled: true
     #  isDefaultClass: true
@@ -221,9 +230,3 @@ spec:
     #      secretKeyRef:
     #        name: cloudflare-api-key
     #        key: api-key
-
-    service:
-      spec:
-        externalTrafficPolicy: Local
-        # TODO make dyamic
-        loadBalancerIP: 10.208.100.18
