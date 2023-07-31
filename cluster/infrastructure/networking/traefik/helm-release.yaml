@@ -142,6 +142,10 @@ spec:
       existingClaim: traefik-config
       path: /ssl-certs
 
+    logs:
+      general:
+        level: INFO #ERROR
+
 
     # Set Traefik as your default Ingress Controller, according to Kubernetes 1.19+ changes.
     #ingressClass:
