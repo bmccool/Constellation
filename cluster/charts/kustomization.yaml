@@ -16,6 +16,7 @@ resources:
   # - ingress-nginx-charts.yaml
   # - jetstack-charts.yaml
   - jenkins-charts.yaml
+  - jfrog-charts.yaml
   - k8s-at-home.yaml
   # - kyverno-charts.yaml
   # - metrics-server-charts.yam

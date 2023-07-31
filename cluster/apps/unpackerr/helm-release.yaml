@@ -44,7 +44,7 @@ spec:
       UN_RADARR_0_PATHS_0: /radarr-0-downloads
 
       # Lidarr
-      UN_LIDARR_0_URL: http://lidarr.brendonmccool.com:8686
+      UN_LIDARR_0_URL: https://lidarr.capricorn.brendonmccool.com/
       UN_LIDARR_0_API_KEY: 3257b245aa114fd888c644697ab7700a
       UN_LIDARR_0_PATHS_0: /lidarr-0-downloads
       # Readarr

@@ -22,7 +22,7 @@ spec:
     image:
       repository: linuxserver/lidarr
       pullPolicy: IfNotPresent
-      tag: 1.0.2
+      tag: 1.2.6
 
     strategy:
       type: Recreate
