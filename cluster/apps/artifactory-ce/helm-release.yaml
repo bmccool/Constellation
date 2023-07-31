@@ -45,7 +45,7 @@ spec:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /mnt/k8s/artifactory-taurus
+        path: /mnt/k8s/artifactory-capricorn
         mountPath: /var/opt/jfrog/artifactory
     # -- Configure probes under this key
     probes:
