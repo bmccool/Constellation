@@ -8,6 +8,7 @@ resources:
   - dashy
   - general-transmission
   - jdownloader-2
+  - jellyfin
   - jenkins
   - lidarr
   - lidarr-transmission
