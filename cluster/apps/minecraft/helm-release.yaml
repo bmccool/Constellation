@@ -6,6 +6,9 @@ metadata:
   namespace: minecraft-ns
 spec:
   interval: 15m
+  install:
+    remediation:
+      retries: 10
   chart:
     spec:
       chart: minecraft
