@@ -9,6 +9,7 @@ resources:
   - general-transmission
   - jdownloader-2
   - jellyfin
+  - jellyseer
   - jenkins
   - lidarr
   - lidarr-transmission
