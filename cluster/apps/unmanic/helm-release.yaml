@@ -22,7 +22,7 @@ spec:
     image:
       repository: josh5/unmanic
       pullPolicy: IfNotPresent
-      tag: 1.7.0
+      tag: 0.2.4
 
     strategy:
       type: Recreate
