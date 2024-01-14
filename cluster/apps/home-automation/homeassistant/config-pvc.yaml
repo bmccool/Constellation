@@ -3,7 +3,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: homeassistant-pvc
-  namespace: homeassistant-ns
+  namespace: home-automation-ns
 spec:
   accessModes:
     - ReadWriteMany

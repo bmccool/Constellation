@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: homeassistant-ingress
-  namespace: homeassistant-ns
+  namespace: home-automation-ns
   annotations:
     # (Optional): Annotations for the Ingress Controller
     # ---
