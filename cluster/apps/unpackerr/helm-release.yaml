@@ -33,7 +33,7 @@ spec:
       UN_LOG_FILE: /unpackerrlogs/log
 
       # Sonarr
-      UN_SONARR_0_URL: http://sonarr.brendonmccool.com:8989
+      UN_SONARR_0_URL: https://sonarr.capricorn.brendonmccool.com/
       UN_SONARR_0_API_KEY: 494008a727b743b497187a0ea99e84ff
       UN_SONARR_0_PATHS_0: /sonarr-0-downloads
 
@@ -64,14 +64,14 @@ spec:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /mnt/k8s/torrents-taurus/radarr/downloads/complete
+        path: /k8s/torrents-taurus/radarr/downloads/complete
       sonarr-0-downloads:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /mnt/k8s/torrents-taurus/done/sonarr
+        path: /k8s/torrents-taurus/done/sonarr
       lidarr-0-downloads:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /mnt/k8s/torrents-taurus/lidarr/downloads/complete
+        path: /k8s/torrents-taurus/lidarr/downloads/complete
