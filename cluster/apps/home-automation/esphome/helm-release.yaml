@@ -27,14 +27,36 @@ spec:
               repository: ghcr.io/esphome/esphome
               tag: 2023.12.5
               pullPolicy: IfNotPresent
+            # -- Environment variables. Template enabled.
+            # Syntax options:
+            # A) TZ: UTC
+            # B) PASSWD: '{{ .Release.Name }}'
+            # B) TZ:
+            #      value: UTC
+            #      dependsOn: otherVar
+            # D) PASSWD:
+            #      configMapKeyRef:
+            #        name: config-map-name
+            #        key: key-name
+            # E) PASSWD:
+            #      dependsOn:
+            #        - otherVar1
+            #        - otherVar2
+            #      valueFrom:
+            #        secretKeyRef:
+            #          name: secret-name
+            #          key: key-name
+            #      ...
+            # F) - name: TZ
+            #      value: UTC
+            # G) - name: TZ
+            #      value: '{{ .Release.Name }}'
+            env:
+              TZ: "America/New York"
+              ESPHOME_DASHBOARD_USE_PING: true
 
     strategy:
       type: Recreate
-
-    # -- environment variables.
-    env:
-      TZ: "America/New York"
-      ESPHOME_DASHBOARD_USE_PING: true
 
     # -- Configures service settings for the chart.
     service:
