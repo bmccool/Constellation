@@ -47,13 +47,14 @@ spec:
           http:
             port: 3000
       tftp_port:
+        controller: main
         ports:
           udp:
             port: 69
-      nginx_port: # not really used, this is for local caching hosting of images
-        ports:
-          http:
-            port: 80
+      #nginx_port: # not really used, this is for local caching hosting of images
+      #  ports:
+      #    http:
+      #      port: 80
 
 
     # -- Configure persistence settings for the chart under this key.
