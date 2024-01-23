@@ -12,7 +12,7 @@ spec:
       # -- Version of the app-template helm chart
       # this example is not automatically updated, so be sure to use the latest chart version
       version: 2.2.0
-      interval: 20m
+      interval: 15m
       sourceRef:
         kind: HelmRepository
         name: bjw-s-helm-charts
