@@ -17,7 +17,6 @@ resources:
   - mealie
   - monitoring
   - minecraft
-  - netbootxyz
   #- nexus
   - podinfo
   - radarr-transmission
