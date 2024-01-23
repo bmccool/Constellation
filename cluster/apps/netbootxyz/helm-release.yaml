@@ -5,6 +5,9 @@ metadata:
   name: netbootxyz
   namespace: netbootxyz-ns
 spec:
+  install:
+    remediation:
+      retries: -1
   interval: 15m
   chart:
     spec:
