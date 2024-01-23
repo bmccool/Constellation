@@ -53,7 +53,7 @@ metadata:
     # traefik.ingress.kubernetes.io/router.middlewares:your-middleware@kubernetescrd
 spec:
   rules:
-    - host: "netbootxyz.capricorn.brendonmccool.com"  # Your hostname
+    - host: "netbootxyz-tftp.capricorn.brendonmccool.com"  # Your hostname
       http:
         paths:
         # Path-based routing settings:
