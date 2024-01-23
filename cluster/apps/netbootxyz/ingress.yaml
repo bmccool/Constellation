@@ -3,7 +3,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: netbootxyz-web-ingress
-  namespace: monitoring
+  namespace: netbootxyz-ns
   annotations:
     # (Optional): Annotations for the Ingress Controller
     # ---
@@ -38,7 +38,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: netbootxyz-tftp-ingress
-  namespace: monitoring
+  namespace: netbootxyz-ns
   annotations:
     # (Optional): Annotations for the Ingress Controller
     # ---
