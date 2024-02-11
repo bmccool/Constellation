@@ -1,0 +1,57 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: radarr
+  namespace: radarr-ns
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      # -- Version of the app-template helm chart
+      # this example is not automatically updated, so be sure to use the latest chart version
+      version: 2.2.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-helm-charts
+        namespace: flux-system
+
+  values:
+
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: linuxserver/radarr
+              tag: 5.2.6
+              pullPolicy: IfNotPresent
+
+    strategy:
+      type: Recreate
+
+    # -- environment variables.
+    env:
+      TZ: "America/New York"
+
+    # -- Configures service settings for the chart.
+    service:
+      main:
+        ports:
+          http:
+            port: 7878
+
+    # -- Configure persistence settings for the chart under this key.
+    persistence:
+      config:
+        globalMounts:
+          - path: /config
+        existingClaim: radarr-pvc
+      data:
+        type: nfs
+        server: NFS.brendonmccool.com
+        path: /k8s/torrents-taurus/radarr/downloads
+        globalMounts:
+          - path: /downloads
