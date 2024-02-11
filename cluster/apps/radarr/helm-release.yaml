@@ -49,9 +49,15 @@ spec:
         globalMounts:
           - path: /config
         existingClaim: radarr-pvc
-      data:
+      downloads:
         type: nfs
         server: NFS.brendonmccool.com
         path: /k8s/torrents-taurus/radarr/downloads
         globalMounts:
           - path: /downloads
+      movies:
+        type: nfs
+        server: NFS.brendonmccool.com
+        path: /media/movies
+        globalMounts:
+          - path: /movies
