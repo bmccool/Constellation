@@ -46,6 +46,7 @@ spec:
     # -- Configure persistence settings for the chart under this key.
     persistence:
       config:
+        type: persistentVolumeClaim
         globalMounts:
           - path: /config
         existingClaim: radarr-pvc
