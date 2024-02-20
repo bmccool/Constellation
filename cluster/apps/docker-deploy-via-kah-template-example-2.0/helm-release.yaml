@@ -46,6 +46,7 @@ spec:
     # -- Configure persistence settings for the chart under this key.
     persistence:
       config:
+        enabled: true
         globalMounts:
           - path: /etc/influxdb2
         existingClaim: influxdb-config-pvc
