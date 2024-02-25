@@ -9,7 +9,7 @@ resources:
   - general-transmission
   - home-automation
   - jdownloader-2
-  - jellyfin
+  #- jellyfin
   - jellyseer
   - jenkins
   - lidarr
