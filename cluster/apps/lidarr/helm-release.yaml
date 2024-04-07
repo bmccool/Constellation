@@ -11,7 +11,7 @@ spec:
       chart: app-template
       # -- Version of the app-template helm chart
       # this example is not automatically updated, so be sure to use the latest chart version
-      version: 0.1.1
+      version: 2.2.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -41,16 +41,22 @@ spec:
     # -- Configure persistence settings for the chart under this key.
     persistence:
       config:
+        type: persistentVolumeClaim
         enabled: true
-        mountPath: /config
+        globalMounts:
+          - path: /config
         existingClaim: lidarr-config-pvc
       music:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /mnt/media/music
+        path: /media/music
+        globalMounts:
+          - path: /music
       downloads:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /mnt/k8s/torrents-taurus/lidarr/downloads/complete
+        path: /k8s/torrents-taurus/lidarr/downloads/complete
+        globalMounts:
+          - path: /downloads

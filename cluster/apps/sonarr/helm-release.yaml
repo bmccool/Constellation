@@ -46,6 +46,8 @@ spec:
     # -- Configure persistence settings for the chart under this key.
     persistence:
       config:
+        type: persistentVolumeClaim
+        enabled: true
         globalMounts:
           - path: /config
         existingClaim: sonarr-config-pvc
