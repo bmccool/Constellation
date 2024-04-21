@@ -34,7 +34,7 @@ spec:
 
       # Sonarr
       UN_SONARR_0_URL: https://sonarr.capricorn.brendonmccool.com/
-      UN_SONARR_0_API_KEY: 494008a727b743b497187a0ea99e84ff
+      UN_SONARR_0_API_KEY: c38ce2424fd244bea0f55866b1600e0f
       UN_SONARR_0_PATHS_0: /sonarr-0-downloads
 
 
