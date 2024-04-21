@@ -56,7 +56,7 @@ spec:
         server: NFS.brendonmccool.com
         path: /k8s/torrents-taurus/done/sonarr
         globalMounts:
-          - path: /downloads
+          - path: /done
       tv:
         type: nfs
         server: NFS.brendonmccool.com

@@ -39,8 +39,8 @@ spec:
 
 
       # Radarr
-      UN_RADARR_0_URL: http://radarr.brendonmccool.com:7878
-      UN_RADARR_0_API_KEY: 65f8b06a72e843f889f072df5d5595e3
+      UN_RADARR_0_URL: http://radarr.capricorn.brendonmccool.com/
+      UN_RADARR_0_API_KEY: 501376b8cc8d4c7f93c5338b6158d599
       UN_RADARR_0_PATHS_0: /radarr-0-downloads
 
       # Lidarr
@@ -65,13 +65,19 @@ spec:
         type: nfs
         server: NFS.brendonmccool.com
         path: /k8s/torrents-taurus/radarr/downloads/complete
+        globalMounts:
+          - path: /radarr-0-downloads
       sonarr-0-downloads:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
         path: /k8s/torrents-taurus/done/sonarr
+        globalMounts:
+          - path: /sonarr-0-downloads
       lidarr-0-downloads:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
         path: /k8s/torrents-taurus/lidarr/downloads/complete
+        globalMounts:
+          - path: /lidarr-0-downloads
