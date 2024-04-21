@@ -26,7 +26,7 @@ spec:
           main:
             image:
               repository: linuxserver/sonarr
-              tag: 4.0.0
+              tag: 4.0.4
               pullPolicy: IfNotPresent
 
     strategy:
