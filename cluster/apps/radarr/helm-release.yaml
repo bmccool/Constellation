@@ -26,7 +26,7 @@ spec:
           main:
             image:
               repository: linuxserver/radarr
-              tag: 5.5.1
+              tag: 5.4.6
               pullPolicy: IfNotPresent
 
     strategy:
