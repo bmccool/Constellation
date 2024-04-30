@@ -30,4 +30,5 @@ resources:
   - unpackerr
   - uptime-kuma
   #- networking
+  - servarr
   - sheetable
