@@ -5,7 +5,7 @@ resources:
   # - aqua-charts.yaml
   - bitnami-charts.yaml
   - bjw-s-helm-charts.yaml
-  # - cloudnative-pg-charts.yaml
+  - cloudnative-pg-charts.yaml
   # - csi-driver-nfs-charts.yaml
   # - descheduler-charts.yaml
   - elastic-charts.yaml
