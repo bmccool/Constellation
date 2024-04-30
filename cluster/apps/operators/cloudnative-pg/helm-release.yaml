@@ -8,10 +8,10 @@ spec:
   interval: 15m
   chart:
     spec:
-      chart: app-template
+      chart: cloudnative-pg
       # -- Version of the app-template helm chart
       # this example is not automatically updated, so be sure to use the latest chart version
-      version: 2.2.0
+      version: 0.21.2
       interval: 15m
       sourceRef:
         kind: HelmRepository
