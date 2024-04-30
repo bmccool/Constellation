@@ -18,6 +18,7 @@ resources:
   - monitoring
   - minecraft
   #- nexus
+  - operators
   - podinfo
   - radarr
   - radarr-transmission
