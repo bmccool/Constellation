@@ -1,34 +1,15 @@
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
 metadata:
-  name: cnpg-ingress
+  name: cnpg-ingress-tcp
   namespace: servarr-ns
-  annotations:
-    # (Optional): Annotations for the Ingress Controller
-    # ---
-    # General:
-    # kubernetes.io/ingress.class: traefik
-    #
-    # TLS configuration:
-    # traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
-    # traefik.ingress.kubernetes.io/router.tls: "true"
-    #
-    # Middleware:
-    # traefik.ingress.kubernetes.io/router.middlewares:your-middleware@kubernetescrd
+
 spec:
-  rules:
-    - host: "servarr-db.capricorn.brendonmccool.com"  # Your hostname
-      http:
-        paths:
-        # Path-based routing settings:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: postgresql-cluster-rw  # The name of the service
-                port:
-                  number: 5432  # Service Portnumber
-  # tls:
-  # - hosts:
-  #   - your-hostname.com  # Your hostname
-  #   secretName: your-secret  # Your TLS Secret
+  # entryPoints:  #ALL??
+  #   - "minecraft", "web", "websecure"
+  routes:
+    - match: HostSNI(`*`)
+      services:
+        - name: postgresql-cluster-rw
+          port: 5432
