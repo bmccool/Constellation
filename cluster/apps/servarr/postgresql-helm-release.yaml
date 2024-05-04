@@ -28,17 +28,16 @@ spec:
               repository: postgres
               tag: 16.2
               pullPolicy: IfNotPresent
+            # -- environment variables.
+            env:
+              TZ: "America/New York"
+              POSTGRES_USER: "servarr"
+              POSTGRES_PASSWORD: "hokeypokey"
+              POSTGRES_DB: "servarr"
+              PGDATA: "/servarr/pgdata"
 
     strategy:
       type: Recreate
-
-    # -- environment variables.
-    env:
-      TZ: "America/New York"
-      POSTGRES_USER: "servarr"
-      POSTGRES_PASSWORD: "hokeypokey"
-      POSTGRES_DB: "servarr"
-      PGDATA: "/servarr/pgdata"
 
     # -- Configures service settings for the chart.
     service:
