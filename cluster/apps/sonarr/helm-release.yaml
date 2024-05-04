@@ -29,11 +29,11 @@ spec:
               tag: 4.0.4
               pullPolicy: IfNotPresent
         initContainers:
-          restoredbig:
+          restoredbag:
             image:
               repository: busybox
               tag: latest
-            command: ['ls', '-lah', '/']
+            command: ['cp', '-rfv', '/persistent-config', '/config']
 
     strategy:
       type: Recreate
