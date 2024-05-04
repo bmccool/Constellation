@@ -22,19 +22,23 @@ spec:
 
     controllers:
       main:
+        initContainers:
+          - name: restore-db
+            image: busybox:latest
+            command: ["cp", "-rfv", "/persistent-config", "/config"]
+
         containers:
           main:
             image:
               repository: linuxserver/sonarr
               tag: 4.0.4
               pullPolicy: IfNotPresent
+                # -- environment variables.
+            env:
+              TZ: "America/New York"
 
     strategy:
       type: Recreate
-
-    # -- environment variables.
-    env:
-      TZ: "America/New York"
 
     # -- Configures service settings for the chart.
     service:
@@ -49,7 +53,7 @@ spec:
         type: persistentVolumeClaim
         enabled: true
         globalMounts:
-          - path: /config
+          - path: /persistent-config
         existingClaim: sonarr-config-pvc
       done:
         type: nfs
