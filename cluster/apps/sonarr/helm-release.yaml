@@ -29,7 +29,7 @@ spec:
               tag: 4.0.4
               pullPolicy: IfNotPresent
         initContainers:
-          restoredb:
+          restoredbig:
             image:
               repository: busybox
               tag: latest
