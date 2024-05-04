@@ -24,17 +24,21 @@ spec:
       main:
         containers:
           main:
-            dependsOn:
-              - restoredb
             image:
               repository: linuxserver/sonarr
               tag: 4.0.4
               pullPolicy: IfNotPresent
+        initContainers:
+          lookaround:
+            image:
+              repository: busybox
+              tag: latest
+            command: ['ls', '-lah', '/']
           restoredb:
             image:
               repository: busybox
               tag: latest
-            command: ['cp', '-rfv', '/persistent-config/*', '/config']
+            command: ['cp', '-rfv', '/persistent-config', '/config']
 
     strategy:
       type: Recreate
