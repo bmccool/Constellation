@@ -33,7 +33,7 @@ spec:
             image:
               repository: busybox
               tag: latest
-            command: ['ls', '-lah', '/persistent-config']
+            command: ['cp', '-rfv', '/persistent-config/*', '/config']
 
     strategy:
       type: Recreate
