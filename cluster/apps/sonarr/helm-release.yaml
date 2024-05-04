@@ -34,11 +34,11 @@ spec:
               repository: busybox
               tag: latest
             command: ['ls', '-lah', '/']
-          restoredb:
-            image:
-              repository: busybox
-              tag: latest
-            command: ['cp', '-rfv', '/persistent-config', '/config']
+          #restoredb:
+          #  image:
+          #    repository: busybox
+          #    tag: latest
+          #  command: ['cp', '-rfv', '/persistent-config', '/config']
 
     strategy:
       type: Recreate
