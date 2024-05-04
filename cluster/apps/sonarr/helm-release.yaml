@@ -39,7 +39,7 @@ spec:
             env:
               TZ: "America/New York"
         initContainers:
-          - name: restore-db
+          restore-db:
             image:
               repository: busybox
               tag: latest
