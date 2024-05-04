@@ -11,7 +11,7 @@ spec:
       chart: app-template
       # -- Version of the app-template helm chart
       # this example is not automatically updated, so be sure to use the latest chart version
-      version: 2.2.0
+      version: 3.1.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -22,24 +22,26 @@ spec:
 
     controllers:
       main:
-        initContainers:
-          - name: restore-db
-            image: busybox:latest
-            command: ["cp", "-rfv", "/persistent-config", "/config"]
-
+        enabled: true
+        # Valid options are deployment, daemonset, statefulset, cronjob or job
+        type: deployment
+        annotations: {}
+        labels: {}
+        replicas: 1
+        # strategy:
+        #   type: Recreate
         containers:
           main:
             image:
               repository: linuxserver/sonarr
               tag: 4.0.4
               pullPolicy: IfNotPresent
-                # -- environment variables.
             env:
               TZ: "America/New York"
-
-    strategy:
-      type: Recreate
-
+        initContainers:
+          - name: restore-db
+            image: busybox:latest
+            command: ["cp", "-rfv", "/persistent-config", "/config"]
     # -- Configures service settings for the chart.
     service:
       main:
