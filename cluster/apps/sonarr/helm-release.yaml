@@ -11,8 +11,8 @@ spec:
       chart: app-template
       # -- Version of the app-template helm chart
       # this example is not automatically updated, so be sure to use the latest chart version
-      version: 3.0.0
-      interval: 10m
+      version: 2.2.0
+      interval: 15m
       sourceRef:
         kind: HelmRepository
         name: bjw-s-helm-charts
@@ -21,32 +21,24 @@ spec:
   values:
 
     controllers:
-      sonarr:
-        enabled: true
-        # Valid options are deployment, daemonset, statefulset, cronjob or job
-        type: deployment
-        annotations: {}
-        labels: {}
-        replicas: 1
-        # strategy:
-        #   type: Recreate
+      main:
         containers:
-          app:
+          main:
             image:
               repository: linuxserver/sonarr
               tag: 4.0.4
               pullPolicy: IfNotPresent
-            env:
-              TZ: "America/New York"
-        initContainers:
-          restoredb:
-            image:
-              repository: busybox
-              tag: latest
-            command: ["cp", "-rf", "/persistent-config", "/config"]
+
+    strategy:
+      type: Recreate
+
+    # -- environment variables.
+    env:
+      TZ: "America/New York"
+
     # -- Configures service settings for the chart.
     service:
-      app:
+      main:
         ports:
           http:
             port: 8989
