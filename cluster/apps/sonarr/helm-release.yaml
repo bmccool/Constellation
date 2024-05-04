@@ -21,7 +21,7 @@ spec:
   values:
 
     controllers:
-      main:
+      sonarr:
         enabled: true
         # Valid options are deployment, daemonset, statefulset, cronjob or job
         type: deployment
@@ -31,7 +31,7 @@ spec:
         # strategy:
         #   type: Recreate
         containers:
-          main:
+          app:
             image:
               repository: linuxserver/sonarr
               tag: 4.0.4
@@ -39,14 +39,14 @@ spec:
             env:
               TZ: "America/New York"
         initContainers:
-          restore-db:
+          restoredb:
             image:
               repository: busybox
               tag: latest
             command: ["cp", "-rf", "/persistent-config", "/config"]
     # -- Configures service settings for the chart.
     service:
-      main:
+      app:
         ports:
           http:
             port: 8989
