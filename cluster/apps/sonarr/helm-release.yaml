@@ -43,7 +43,7 @@ spec:
             image:
               repository: busybox
               tag: latest
-            command: ["cp", "-rfv", "/persistent-config", "/config"]
+            command: ["cp", "-rf", "/persistent-config", "/config"]
     # -- Configures service settings for the chart.
     service:
       main:
