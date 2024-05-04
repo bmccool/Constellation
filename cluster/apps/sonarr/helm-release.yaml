@@ -28,6 +28,12 @@ spec:
               repository: linuxserver/sonarr
               tag: 4.0.4
               pullPolicy: IfNotPresent
+        initContainers:
+          restoredb:
+            image:
+              repository: busybox
+              tag: latest
+            command: ['ls', '-lah', '/']
 
     strategy:
       type: Recreate
