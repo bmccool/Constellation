@@ -38,12 +38,7 @@ spec:
               pullPolicy: IfNotPresent
             env:
               TZ: "America/New York"
-        initContainers:
-          restore-db:
-            image:
-              repository: busybox
-              tag: latest
-            command: ["cp", "-rf", "/persistent-config", "/config"]
+
     # -- Configures service settings for the chart.
     service:
       main:
