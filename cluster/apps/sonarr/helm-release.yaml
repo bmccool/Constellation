@@ -40,7 +40,9 @@ spec:
               TZ: "America/New York"
         initContainers:
           - name: restore-db
-            image: busybox:latest
+            image:
+              repository: busybox
+              tag: latest
             command: ["cp", "-rfv", "/persistent-config", "/config"]
     # -- Configures service settings for the chart.
     service:
