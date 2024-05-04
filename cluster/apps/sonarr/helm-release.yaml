@@ -24,11 +24,12 @@ spec:
       main:
         containers:
           main:
+            dependsOn:
+              - restoredb
             image:
               repository: linuxserver/sonarr
               tag: 4.0.4
               pullPolicy: IfNotPresent
-        initContainers:
           restoredb:
             image:
               repository: busybox
