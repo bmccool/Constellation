@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: cnpg-ingress
+  name: postgres-ingress
   namespace: servarr-ns
   annotations:
     # (Optional): Annotations for the Ingress Controller
@@ -25,7 +25,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: postgresql-cluster-rw  # The name of the service
+                name: postgres  # The name of the service
                 port:
                   number: 5432  # Service Portnumber
   # tls:
