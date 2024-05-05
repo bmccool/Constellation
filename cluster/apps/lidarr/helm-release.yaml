@@ -26,7 +26,7 @@ spec:
             image:
               repository: linuxserver/lidarr
               pullPolicy: IfNotPresent
-              tag: 2.3.0
+              tag: 2.3.3-nightly
           backuprsync:
             image:
               repository: bmccool/cron-rsync
