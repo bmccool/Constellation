@@ -33,7 +33,7 @@ spec:
             image:
               repository: ubuntu
               tag: latest
-            command: ['apt-get', 'update', '&&', 'apt-get', 'upgrade', '-y', '&&', 'apt-get', 'install', '-y', 'rsync', '&&', 'rsync', '--archive', '--verbose', '--partial', --progress', '/persistent-config/.', '/config']
+            command: ["/bin/bash", "-c", "apt-get update && apt-get upgrade -y && apt-get install -y rsync && rsync --archive --verbose --partial --progress /persistent-config/. /config"]
       backup:
         type: cronjob
         cronjob:
