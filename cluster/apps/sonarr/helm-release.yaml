@@ -33,7 +33,7 @@ spec:
             image:
               repository: ubuntu
               tag: latest
-            command: ['cp', '-rfv', '/persistent-config/.*', '/config']
+            command: ['cp', '-rfv', '/persistent-config/.', '/config']
 
     strategy:
       type: Recreate
