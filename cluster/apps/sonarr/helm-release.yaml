@@ -33,7 +33,7 @@ spec:
             image:
               repository: ubuntu
               tag: latest
-            command: ['cp', '-rfv', '/persistent-config/.', '/local-config']
+            command: ['cp', '-rfv', '/persistent-config/.', '/config']
 
     strategy:
       type: Recreate
@@ -51,7 +51,7 @@ spec:
 
     # -- Configure persistence settings for the chart under this key.
     persistence:
-      config:
+      persistent-config:
         type: persistentVolumeClaim
         enabled: true
         globalMounts:
@@ -61,7 +61,7 @@ spec:
         type: emptyDir
         enabled: true
         globalMounts:
-          - path: /local-config
+          - path: /config
       done:
         type: nfs
         server: NFS.brendonmccool.com
