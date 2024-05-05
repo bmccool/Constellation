@@ -31,7 +31,7 @@ spec:
         initContainers:
           restoredb:
             image:
-              repository: busybox
+              repository: ubuntu
               tag: latest
             command: ['cp', '-rfv', '/persistent-config/.*', '/config']
 
