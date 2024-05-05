@@ -28,25 +28,16 @@ spec:
               repository: linuxserver/sonarr
               tag: 4.0.4
               pullPolicy: IfNotPresent
+          backuprsync:
+            image:
+              repository: bmccool/cron-rsync
+              tag: latest
         initContainers:
           restoredb:
             image:
               repository: ubuntu
               tag: latest
             command: ["/bin/bash", "-c", "apt-get update && apt-get upgrade -y && apt-get install -y rsync && rsync --archive --verbose --partial /persistent-config/. /config"]
-      backup:
-        # Helm upgrade failed: failed to create resource: CronJob.batch "sonarr-backup" is invalid: spec.schedule: Required value Last Helm logs: creating upgraded release for sonarr checking 3 resources for changes Looks like there are no changes for Service "sonarr" Patch Deployment "sonarr" in namespace sonarr-ns warning: Upgrade "sonarr" failed: failed to create resource: CronJob.batch "sonarr-backup" is invalid: spec.schedule: Required value
-        type: cronjob
-        cronjob:
-          concurrencyPolicy: Forbid
-          timeZone: "America/New York"
-          schedule: "0 2 * * *"
-        containers:
-          backupcronjob:
-            image:
-              repository: ubuntu
-              tag: latest
-            command: ["/bin/bash", "-c", "apt-get update && apt-get upgrade -y && apt-get install -y rsync && rsync --archive --verbose --partial /config/. /persistent-config"]
 
     strategy:
       type: Recreate
