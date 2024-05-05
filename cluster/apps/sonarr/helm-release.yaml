@@ -33,7 +33,19 @@ spec:
             image:
               repository: ubuntu
               tag: latest
-            command: ['cp', '-rfv', '/persistent-config/.', '/config']
+            command: ['rsync', '-av', '/persistent-config/.', '/config']
+      backup:
+        type: cronjob
+        cronjob:
+          concurrencyPolicy: Forbid
+          timeZone: "America/New York"
+          shedule: "0 2 * * *"
+        containers:
+          backupcronjob:
+            image:
+              repository: ubuntu
+              tag: latest
+            command: ['rsync', '-av', '/config/.', '/persistent-config']
 
     strategy:
       type: Recreate
