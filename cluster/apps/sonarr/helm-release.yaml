@@ -33,7 +33,7 @@ spec:
             image:
               repository: ubuntu
               tag: latest
-            command: ['rsync', '-av', '/persistent-config/.', '/config']
+            command: ['apt-get', 'update', '&&', 'apt-get', 'upgrade', '-y', '&&', 'apt-get', 'install', '-y', 'rsync', '&&', 'rsync', '-av', '/persistent-config/.', '/config']
       backup:
         type: cronjob
         cronjob:
@@ -45,7 +45,7 @@ spec:
             image:
               repository: ubuntu
               tag: latest
-            command: ['rsync', '-av', '/config/.', '/persistent-config']
+            command: ['apt-get', 'update', '&&', 'apt-get', 'upgrade', '-y', '&&', 'apt-get', 'install', '-y', 'rsync', '&&', 'rsync', '-av', '/config/.', '/persistent-config']
 
     strategy:
       type: Recreate
