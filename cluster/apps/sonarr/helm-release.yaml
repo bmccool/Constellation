@@ -57,6 +57,11 @@ spec:
         globalMounts:
           - path: /persistent-config
         existingClaim: sonarr-config-pvc
+      local-config:
+        type: emptyDir
+        enabled: true
+        globalMounts:
+          - path: /local-config
       done:
         type: nfs
         server: NFS.brendonmccool.com
