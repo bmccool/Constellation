@@ -11,7 +11,7 @@ spec:
       chart: app-template
       # -- Version of the app-template helm chart
       # this example is not automatically updated, so be sure to use the latest chart version
-      version: 0.1.1
+      version: 2.2.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -19,33 +19,57 @@ spec:
         namespace: flux-system
 
   values:
-    image:
-      repository: linuxserver/readarr
-      pullPolicy: IfNotPresent
-      tag: 0.1.1-nightly
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: linuxserver/readarr
+              tag: 0.3.27-nightly
+              pullPolicy: IfNotPresent
+          backuprsync:
+            image:
+              repository: bmccool/cron-rsync
+              tag: latest
+        initContainers:
+          restoredb:
+            image:
+              repository: ubuntu
+              tag: latest
+            command: ["/bin/bash", "-c", "apt-get update && apt-get upgrade -y && apt-get install -y rsync && rsync --archive --verbose --partial /persistent-config/. /config"]
 
     strategy:
       type: Recreate
 
-    env:
-      TZ: "America/New York"
     service:
       main:
         ports:
           http:
             port: 8787
+
     persistence:
-      config:
+      persistent-config:
+        type: persistentVolumeClaim
         enabled: true
-        mountPath: /config
+        globalMounts:
+          - path: /persistent-config
         existingClaim: readarr-config-pvc
+      local-config:
+        type: emptyDir
+        enabled: true
+        globalMounts:
+          - path: /config
       books:
-        enabled: true
         type: nfs
+        enabled: true
         server: NFS.brendonmccool.com
-        path: /mnt/k8s/calibre-taurus
+        path: /k8s/calibre-taurus
+        globalMounts:
+          - path: /books
       done:
-        enabled: true
         type: nfs
+        enabled: true
         server: NFS.brendonmccool.com
-        path: /mnt/k8s/torrents-taurus/done/readarr
+        path: /k8s/torrents-taurus/done/readarr
+        globalMounts:
+          - path: /done
