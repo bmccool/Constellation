@@ -28,6 +28,16 @@ spec:
               repository: linuxserver/radarr
               tag: 5.4.6
               pullPolicy: IfNotPresent
+          backuprsync:
+            image:
+              repository: bmccool/cron-rsync
+              tag: latest
+        initContainers:
+          restoredb:
+            image:
+              repository: ubuntu
+              tag: latest
+            command: ["/bin/bash", "-c", "apt-get update && apt-get upgrade -y && apt-get install -y rsync && rsync --archive --verbose --partial /persistent-config/. /config"]
 
     strategy:
       type: Recreate
@@ -49,8 +59,13 @@ spec:
         type: persistentVolumeClaim
         enabled: true
         globalMounts:
-          - path: /config
+          - path: /persistent-config
         existingClaim: radarr-pvc
+      local-config:
+        type: emptyDir
+        enabled: true
+        globalMounts:
+          - path: /config
       downloads:
         type: nfs
         server: NFS.brendonmccool.com
