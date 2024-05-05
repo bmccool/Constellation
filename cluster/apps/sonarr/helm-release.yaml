@@ -19,7 +19,6 @@ spec:
         namespace: flux-system
 
   values:
-
     controllers:
       main:
         containers:
@@ -41,10 +40,6 @@ spec:
 
     strategy:
       type: Recreate
-
-    # -- environment variables.
-    env:
-      TZ: "America/New York"
 
     # -- Configures service settings for the chart.
     service:
