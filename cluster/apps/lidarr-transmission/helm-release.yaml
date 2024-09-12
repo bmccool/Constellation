@@ -1,0 +1,60 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: transmission
+  namespace: lidarr-transmission-ns
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      # -- Version of the app-template helm chart
+      # this example is not automatically updated, so be sure to use the latest chart version
+      version: 0.1.1
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-helm-charts
+        namespace: flux-system
+
+  values:
+    image:
+      repository: linuxserver/transmission
+      pullPolicy: IfNotPresent
+      tag: version-3.00-r5
+
+    strategy:
+      type: Recreate
+
+    # -- environment variables.
+    env:
+      TZ: "America/New York"
+      # -- Meant to utilize fancy web UI
+      TRANSMISSION_WEB_HOME: /combustion-release/
+      USER: transmission #optional
+      PASS: transmission #optional
+
+    # -- Configures service settings for the chart.
+    service:
+      main:
+        ports:
+          http:
+            port: 9091
+
+    # -- Configure persistence settings for the chart under this key.
+    persistence:
+      config:
+        enabled: true
+        mountPath: /config
+        existingClaim: transmission-config-pvc
+      watch:
+        enabled: true
+        type: nfs
+        server: NFS.brendonmccool.com
+        path: /mnt/k8s/torrents-taurus/lidarr/watch
+      downloads:
+        enabled: true
+        type: nfs
+        server: NFS.brendonmccool.com
+        path: /mnt/k8s/torrents-taurus/lidarr/downloads

@@ -1,0 +1,83 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: unpackerr
+  namespace: unpackerr-ns
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      # -- Version of the app-template helm chart
+      # this example is not automatically updated, so be sure to use the latest chart version
+      version: 2.2.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-helm-charts
+        namespace: flux-system
+
+  values:
+    image:
+      repository: golift/unpackerr
+      pullPolicy: IfNotPresent
+      tag: "0"
+
+    strategy:
+      type: Recreate
+
+    # -- environment variables.
+    env:
+      TZ: "America/New York"
+      UN_LOG_FILE: /unpackerrlogs/log
+
+      # Sonarr
+      UN_SONARR_0_URL: https://sonarr.capricorn.brendonmccool.com/
+      UN_SONARR_0_API_KEY: c38ce2424fd244bea0f55866b1600e0f
+      UN_SONARR_0_PATHS_0: /sonarr-0-downloads
+
+
+      # Radarr
+      UN_RADARR_0_URL: https://radarr.capricorn.brendonmccool.com/
+      UN_RADARR_0_API_KEY: 501376b8cc8d4c7f93c5338b6158d599
+      UN_RADARR_0_PATHS_0: /radarr-0-downloads
+
+      # Lidarr
+      UN_LIDARR_0_URL: https://lidarr.capricorn.brendonmccool.com/
+      UN_LIDARR_0_API_KEY: ef6d1e0c871a4d21a648fbf2d0625652
+      UN_LIDARR_0_PATHS_0: /lidarr-0-downloads
+      # Readarr
+      # Folder
+
+    # -- Configures service settings for the chart.
+    service:
+      main:
+        enabled: false
+        ports:
+          http:
+            port: 9091
+
+    # -- Configure persistence settings for the chart under this key.
+    persistence:
+      radarr-0-downloads:
+        enabled: true
+        type: nfs
+        server: NFS.brendonmccool.com
+        path: /k8s/torrents-taurus/radarr/downloads/complete
+        globalMounts:
+          - path: /radarr-0-downloads
+      sonarr-0-downloads:
+        enabled: true
+        type: nfs
+        server: NFS.brendonmccool.com
+        path: /k8s/torrents-taurus/done/sonarr
+        globalMounts:
+          - path: /sonarr-0-downloads
+      lidarr-0-downloads:
+        enabled: true
+        type: nfs
+        server: NFS.brendonmccool.com
+        path: /k8s/torrents-taurus/lidarr/downloads/complete
+        globalMounts:
+          - path: /lidarr-0-downloads

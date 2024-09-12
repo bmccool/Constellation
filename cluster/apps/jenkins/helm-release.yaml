@@ -1,0 +1,29 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: jenkins
+  namespace: jenkins-ns
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: jenkins
+      # -- Version of the app-template helm chart
+      # this example is not automatically updated, so be sure to use the latest chart version
+      version: 4.2.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: jenkins-charts
+        namespace: flux-system
+
+  values:
+    persistence:
+      existingClaim: jenkins-pvc
+    serviceAccount:
+      create: false
+      name: jenkins
+    controller:
+      installPlugins:
+        # Don't install any extra plugins, this can create conflicts

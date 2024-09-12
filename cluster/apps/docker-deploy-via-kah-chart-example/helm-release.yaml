@@ -1,0 +1,51 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: readarr
+  namespace: readarr-ns
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      # -- Version of the app-template helm chart
+      # this example is not automatically updated, so be sure to use the latest chart version
+      version: 1.3.2
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-helm-charts
+        namespace: flux-system
+
+  values:
+    image:
+      repository: linuxserver/readarr
+      pullPolicy: IfNotPresent
+      tag: 0.1.1-nightly
+
+    strategy:
+      type: Recreate
+
+    env:
+      TZ: "America/New York"
+    service:
+      main:
+        ports:
+          http:
+            port: 8787
+    persistence:
+      config:
+        enabled: true
+        mountPath: /config
+        existingClaim: readarr-config-pvc
+      books:
+        enabled: true
+        type: nfs
+        server: NFS.brendonmccool.com
+        path: /mnt/k8s/calibre-taurus
+      done:
+        enabled: true
+        type: nfs
+        server: NFS.brendonmccool.com
+        path: /mnt/k8s/torrents-taurus/done/readarr

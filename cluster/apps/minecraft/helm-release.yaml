@@ -6,6 +6,9 @@ metadata:
   namespace: minecraft-ns
 spec:
   interval: 15m
+  install:
+    remediation:
+      retries: 10
   chart:
     spec:
       chart: minecraft
@@ -49,7 +52,7 @@ spec:
       TZ: "America/New York"
 
     # serviceAnnotations:
-    #   "mc-router.itzg.me/externalServerName": "minecraft.gemini.brendonmccool.com"
+    #   "mc-router.itzg.me/externalServerName": "minecraft.capricorn.brendonmccool.com"
 
     minecraftServer:
       # This must be overridden, since we can't accept this for the user.

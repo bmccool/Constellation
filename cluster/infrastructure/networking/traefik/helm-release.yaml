@@ -1,0 +1,247 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: traefik
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: traefik
+      #version: 10.24.0
+      version: 23.2.0
+      sourceRef:
+        kind: HelmRepository
+        name: traefik-charts
+        namespace: flux-system
+      interval: 15m
+  #valuesFrom:
+  #  - kind: ConfigMap
+  #    name: traefik-values
+  #    valuesKey: values.yaml
+  values:
+    image:
+      # -- Traefik image host registry
+      registry: docker.io
+      # -- Traefik image repository
+      repository: traefik
+      # -- defaults to appVersion
+      tag: "v2.10.4"
+      # -- Traefik image pull policy
+      pullPolicy: IfNotPresent
+      #additionalArguments:
+      # Configure your CertificateResolver here...
+      #
+      # HTTP Challenge
+      # ---
+      # Generic Example:
+      #   - --certificatesresolvers.generic.acme.email=your-email@example.com
+      #   - --certificatesresolvers.generic.acme.caServer=https://acme-v02.api.letsencrypt.org/directory
+      #   - --certificatesresolvers.generic.acme.httpChallenge.entryPoint=web
+      #   - --certificatesresolvers.generic.acme.storage=/ssl-certs/acme-generic.json
+      #
+      # Prod / Staging Example:
+      #   - --certificatesresolvers.staging.acme.email=your-email@example.com
+      #   - --certificatesresolvers.staging.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory
+      #   - --certificatesresolvers.staging.acme.httpChallenge.entryPoint=web
+      #   - --certificatesresolvers.staging.acme.storage=/ssl-certs/acme-staging.json
+      #   - --certificatesresolvers.production.acme.email=your-email@example.com
+      #   - --certificatesresolvers.production.acme.caServer=https://acme-v02.api.letsencrypt.org/directory
+      #   - --certificatesresolvers.production.acme.httpChallenge.entryPoint=web
+      #   - --certificatesresolvers.production.acme.storage=/ssl-certs/acme-production.json
+      #
+      # DNS Challenge
+      # ---
+      # Cloudflare Example:
+      #  - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
+      #  - --certificatesresolvers.cloudflare.acme.email=your-email@example.com
+      #  - --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1
+      #  - --certificatesresolvers.cloudflare.acme.storage=/ssl-certs/acme-cloudflare.json
+
+      # My DOCKER Cloudflare DNS config
+      #  - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare"
+      #  - "--certificatesresolvers.letsencrypt.acme.email=brendonmccool@gmail.com"
+      #  - "--certificatesresolvers.letsencrypt.acme.storage=/data/acme.json"
+      #  - "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory"
+      #  - "--certificatesResolvers.letsencrypt.acme.dnsChallenge=true"
+
+      # Cloudflare Example with my details
+
+
+      #
+      # Generic (replace with your DNS provider):
+      #  - --certificatesresolvers.generic.acme.dnschallenge.provider=generic
+      #  - --certificatesresolvers.generic.acme.email=your-email@example.com
+      #  - --certificatesresolvers.generic.acme.storage=/ssl-certs/acme-generic.json
+
+    #certificateResolvers:
+    #
+    #  letsencrypt:
+    #    # for challenge options cf. https://doc.traefik.io/traefik/https/acme/
+    #    email: brendonmccool@gmail.com
+    #    dnsChallenge:
+    #      # also add the provider's required configuration under env
+    #      # or expand then from secrets/configmaps with envfrom
+    #      # cf. https://doc.traefik.io/traefik/https/acme/#providers
+    #      provider: cloudflare
+    #      # add futher options for the dns challenge as needed
+    #      # cf. https://doc.traefik.io/traefik/https/acme/#dnschallenge
+    #      #delayBeforeCheck: 30
+    #      #resolvers:
+    #      #  - 1.1.1.1
+    #      #  - 8.8.8.8
+    #    storage: /ssl-certs/acme-cloudflare.json
+
+
+    additionalArguments:
+      #- --entrypoints.websecure.http.tls.certresolver=cloudflare
+      #- --entrypoints.websecure.http.tls.domains[0].main=brendonmccool.com
+      #- --entrypoints.websecure.http.tls.domains[0].sans=*.brendonmccool.com
+      #- --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
+      #- --certificatesresolvers.cloudflare.acme.email=mail@example.com
+      #- --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1
+      #- --certificatesresolvers.cloudflare.acme.storage=/certs/acme.json
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.cloudflare.acme.email=brendonmccool@gmail.com
+      - --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1
+      - --certificatesresolvers.cloudflare.acme.storage=/ssl-certs/acme-cloudflare.json
+
+    ports:
+      minecraft:
+        port: 25565
+        expose: true
+        exposedPort: 25565
+        protocol: TCP
+      postgres:
+        port: 5432
+        expose: true
+        exposedPort: 5432
+        protocol: TCP
+      web:
+        redirectTo: websecure
+      websecure:
+        tls:
+          enabled: true
+          # (optional) Set a Default CertResolver
+          certResolver: cloudflare
+
+    env:
+      - name: CF_API_EMAIL
+        valueFrom:
+          secretKeyRef:
+            name: cloudflare-api-key
+            key: api-email
+      - name: CF_API_KEY
+        valueFrom:
+          secretKeyRef:
+            name: cloudflare-api-key
+            key: api-key
+
+    ingressRoute:
+      dashboard:
+        enabled: false
+
+    # Set Traefik as your default Ingress Controller, according to Kubernetes 1.19+ changes.
+    ingressClass:
+      enabled: true
+      isDefaultClass: true
+
+    persistence:
+      enabled: true
+      name: ssl-certs
+      existingClaim: traefik-config
+      path: /ssl-certs
+
+    logs:
+      general:
+        level: INFO #ERROR
+
+    service:
+      spec:
+        externalTrafficPolicy: Local
+        # TODO make dyamic
+        loadBalancerIP: 10.208.100.18
+
+    deployment:
+      initContainers:
+        - name: volume-permissions
+          image: busybox:1.31.1
+          command: ["sh", "-c", "chmod -Rv 600 /ssl-certs/*"]
+          volumeMounts:
+            - name: ssl-certs
+              mountPath: /ssl-certs
+
+    #ingressClass:
+    #  enabled: true
+    #  isDefaultClass: true
+
+    # Enable Dashboard
+    #ingressRoute:
+    #  dashboard:
+    #    enabled: true
+
+    #logs:
+    ## Configure log settings here...
+    #  general:
+    #    level: INFO #ERROR
+
+    #ports:
+    #  minecraft:
+    #    port: 25565
+    #    expose: true
+    #    exposedPort: 25565
+    #    protocol: TCP
+    #  # Configure your entrypoints here...
+    #  web:
+    #    ## -- Enable this entrypoint as a default entrypoint. When a service doesn't explicitly set an entrypoint it will only use this entrypoint.
+    #    # asDefault: true
+    #    port: 8000
+    #    # hostPort: 8000
+    #    # containerPort: 8000
+    #    expose: true
+    #    exposedPort: 80
+    #    ## -- Different target traefik port on the cluster, useful for IP type LB
+    #    # targetPort: 80
+    #    # The port protocol (TCP/UDP)
+    #    protocol: TCP
+    #    # -- Use nodeport if set. This is useful if you have configured Traefik in a
+    #    # LoadBalancer.
+    #    # nodePort: 32080
+    #    # Port Redirections
+    #    # Added in 2.2, you can make permanent redirects via entrypoints.
+    #    # https://docs.traefik.io/routing/entrypoints/#redirection
+    #    # redirectTo: websecure
+    #    #
+    #    # Trust forwarded  headers information (X-Forwarded-*).
+    #    # forwardedHeaders:
+    #    #   trustedIPs: []
+    #    #   insecure: false
+    #    #
+    #    # Enable the Proxy Protocol header parsing for the entry point
+    #    # proxyProtocol:
+    #    #   trustedIPs: []
+    #    #   insecure: false
+    #  websecure:
+    #    tls:
+    #      enabled: true
+    #      # (optional) Set a Default CertResolver
+    #      certResolver: cloudflare
+
+
+    #env:
+    #  # Set your environment variables here...
+    #  #
+    #  # DNS Challenge Credentials
+    #  # ---
+    #  # Cloudflare Example:
+    #  - name: CF_API_EMAIL
+    #    valueFrom:
+    #      secretKeyRef:
+    #        name: cloudflare-api-key
+    #        key: api-email
+    #  - name: CF_API_KEY
+    #    valueFrom:
+    #      secretKeyRef:
+    #        name: cloudflare-api-key
+    #        key: api-key

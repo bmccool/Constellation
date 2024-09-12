@@ -1,0 +1,19 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tempo-distributor-ingress
+  namespace: monitoring
+spec:
+  rules:
+    - host: "tempo-distributor.capricorn.brendonmccool.com"  # Your hostname
+      http:
+        paths:
+          # Path-based routing settings:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: tempo-distributor  # The name of the service
+                port:
+                  number: 4317  # Service Portnumber

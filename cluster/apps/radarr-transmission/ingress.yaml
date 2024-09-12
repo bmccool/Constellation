@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: transmission-ingress
+  namespace: radarr-transmission-ns
+  annotations:
+    # (Optional): Annotations for the Ingress Controller
+    # ---
+    # General:
+    # kubernetes.io/ingress.class: traefik
+    #
+    # TLS configuration:
+    # traefik.ingress.kubernetes.io/router.entrypoints: web, websecure
+    # traefik.ingress.kubernetes.io/router.tls: "true"
+    #
+    # Middleware:
+    # traefik.ingress.kubernetes.io/router.middlewares:your-middleware@kubernetescrd
+spec:
+  rules:
+    - host: "radarr-transmission.capricorn.brendonmccool.com"  # Your hostname
+      http:
+        paths:
+        # Path-based routing settings:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: transmission  # The name of the service
+                port:
+                  number: 9091  # Service Portnumber
+  # tls:
+  # - hosts:
+  #   - your-hostname.com  # Your hostname
+  #   secretName: your-secret  # Your TLS Secret

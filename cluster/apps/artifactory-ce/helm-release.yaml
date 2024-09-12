@@ -1,0 +1,67 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: artifactory-ce
+  namespace: artifactory-ce-ns
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      # -- Version of the app-template helm chart
+      # this example is not automatically updated, so be sure to use the latest chart version
+      version: 0.1.1
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-helm-charts
+        namespace: flux-system
+
+  values:
+    image:
+      repository: docker.bintray.io/jfrog/artifactory-cpp-ce
+      pullPolicy: IfNotPresent
+      tag: latest
+
+    strategy:
+      type: Recreate
+
+    # -- environment variables.
+    env:
+      TZ: "America/New York"
+    service:
+      main:
+        ports:
+          http:
+            port: 8082
+          api:
+            enabled: true
+            port: 8081
+
+    # -- Configure persistence settings for the chart under this key.
+    persistence:
+      artifactory:
+        enabled: true
+        type: nfs
+        server: NFS.brendonmccool.com
+        path: /mnt/k8s/artifactory-capricorn
+        mountPath: /var/opt/jfrog/artifactory
+    # -- Configure probes under this key
+    probes:
+      # -- Liveness probe configuration
+      # @default -- See below
+      liveness:
+        # -- Enable the liveness probe
+        enabled: true
+        # -- Set this to `true` if you wish to specify your own livenessProbe
+        custom: true
+        # -- The spec field contains the values for the default livenessProbe.
+        # If you selected `custom: true`, this field holds the definition of the livenessProbe.
+        # @default -- See below
+        spec:
+          httpGet:
+            path: /access/api/v1/system/readiness
+            port: 8082
+          initialDelaySeconds: 60
+          periodSeconds: 30

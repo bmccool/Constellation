@@ -2,3 +2,7 @@
 */files/cert-manager-secret.sops.yaml
 */files/flux_data.yaml
 */cluster/.envrc
+ansible/files/kube-config
+ansible/files/sops_3.7.3_amd64.deb
+ansible/join-command-controller
+ansible/join-command-worker

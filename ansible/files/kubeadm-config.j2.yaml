@@ -4,10 +4,11 @@ apiVersion: kubeadm.k8s.io/v1beta3
 kubernetesVersion: 1.24.3
 # TODO
 clusterName: "{{ cluster_friendly_name }}"
+controlPlaneEndpoint: "{{ controlplane_endpoint_ipaddress }}"
 apiServer:
   # timeoutForControlPlane: 4m0s
   certSANs:
-    - "{{ ip_result.stdout }}"
+    - "{{ controlplane_endpoint_ipaddress }}"
   # Expand node port range for minecraft according to https://hub.docker.com/r/itzg/mc-router
   extraArgs:
     service-node-port-range: 80-32767
@@ -21,8 +22,8 @@ apiVersion: kubelet.config.k8s.io/v1beta1
 cgroupDriver: "systemd"
 # protectKernelDefaults: true
 ---
-kind: InitConfiguration
 apiVersion: kubeadm.k8s.io/v1beta3
+kind: InitConfiguration
 nodeRegistration:
   # criSocket: unix:///var/run/containerd/containerd.sock
   imagePullPolicy: IfNotPresent
@@ -32,3 +33,4 @@ nodeRegistration:
   localAPIEndpoint:
     advertiseAddress: "{{ ip_result.stdout }}"
     bindPort: 6443
+certificateKey: "{{ certkey.stdout }}"

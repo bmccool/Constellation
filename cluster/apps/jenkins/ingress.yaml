@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jenkins-ingress
+  namespace: jenkins-ns
+  annotations:
+spec:
+  rules:
+    - host: "jenkins.capricorn.brendonmccool.com"  # Your hostname
+      http:
+        paths:
+        # Path-based routing settings:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: jenkins  # The name of the service
+                port:
+                  number: 8080  # Service Portnumber
+#---
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: jenkins-agent-ingress
+#  namespace: jenkins-ns
+#  annotations:
+#spec:
+#  rules:
+#    - host: "jenkins.capricorn.brendonmccool.com"  # Your hostname
+#      http:
+#        paths:
+#        # Path-based routing settings:
+#          - path: /
+#            pathType: Prefix
+#            backend:
+#              service:
+#                name: jenkins-agent  # The name of the service
+#                port:
+#                  number: 50000  # Service Portnumber

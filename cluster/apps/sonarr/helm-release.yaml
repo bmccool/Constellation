@@ -1,0 +1,75 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: sonarr
+  namespace: sonarr-ns
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      # -- Version of the app-template helm chart
+      # this example is not automatically updated, so be sure to use the latest chart version
+      version: 2.2.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-helm-charts
+        namespace: flux-system
+
+  values:
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: linuxserver/sonarr
+              tag: 4.0.4
+              pullPolicy: IfNotPresent
+          backuprsync:
+            image:
+              repository: bmccool/cron-rsync
+              tag: latest
+        initContainers:
+          restoredb:
+            image:
+              repository: ubuntu
+              tag: latest
+            command: ["/bin/bash", "-c", "apt-get update && apt-get upgrade -y && apt-get install -y rsync && rsync --archive --verbose --partial /persistent-config/. /config"]
+
+    strategy:
+      type: Recreate
+
+    # -- Configures service settings for the chart.
+    service:
+      main:
+        ports:
+          http:
+            port: 8989
+
+    # -- Configure persistence settings for the chart under this key.
+    persistence:
+      persistent-config:
+        type: persistentVolumeClaim
+        enabled: true
+        globalMounts:
+          - path: /persistent-config
+        existingClaim: sonarr-config-pvc
+      local-config:
+        type: emptyDir
+        enabled: true
+        globalMounts:
+          - path: /config
+      done:
+        type: nfs
+        server: NFS.brendonmccool.com
+        path: /k8s/torrents-taurus/done/sonarr
+        globalMounts:
+          - path: /done
+      tv:
+        type: nfs
+        server: NFS.brendonmccool.com
+        path: /media/tv
+        globalMounts:
+          - path: /tv
