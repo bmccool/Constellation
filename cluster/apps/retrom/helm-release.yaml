@@ -28,6 +28,8 @@ spec:
               repository: ghcr.io/jmberesford/retrom-service
               tag: latest
               pullPolicy: IfNotPresent
+            env:
+              TZ: "America/New York"
       pgdb:
         containers:
           main:
@@ -36,16 +38,8 @@ spec:
               tag: 16
               pullPolicy: IfNotPresent
 
-
     strategy:
       type: Recreate
-
-    # -- environment variables.
-    env:
-      TZ: "America/New York"
-      POSTGRES_USER: pguser
-      POSTGRES_PASSWORD: q2w3e4r5Q@W#E$R%
-      POSTGRES_DB: retrom
 
     # -- Configures service settings for the chart.
     service:
