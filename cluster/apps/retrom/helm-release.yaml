@@ -60,10 +60,11 @@ spec:
             port: 5101
       pgdb:
         controller: pgdb
-        type: nodePort
+        type: NodePort
         ports:
           http:
             port: 5432
+            targetPort: 5432
             protocol: TCP
             nodePort: 5432
 
