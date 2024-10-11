@@ -37,6 +37,11 @@ spec:
               repository: postgres
               tag: 16
               pullPolicy: IfNotPresent
+            env:
+              TZ: "America/New York"
+              POSTGRES_USER: pguser
+              POSTGRES_PASSWORD: q2w3e4r5Q@W#E$R%
+              POSTGRES_DB: retrom
 
     strategy:
       type: Recreate
