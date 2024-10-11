@@ -33,12 +33,11 @@ spec:
   #   - your-hostname.com  # Your hostname
   #   secretName: your-secret  # Your TLS Secret
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
 metadata:
   name: retrom-pgdb-ingress
   namespace: retrom-ns
-  annotations:
 spec:
   entryPoints:
     - retrom-pgdb
