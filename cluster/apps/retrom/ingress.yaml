@@ -40,15 +40,10 @@ metadata:
   namespace: retrom-ns
   annotations:
 spec:
-  rules:
-    - host: "retrom-pgdb.capricorn.brendonmccool.com"  # Your hostname
-      http:
-        paths:
-        # Path-based routing settings:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: retrom-pgdb  # The name of the service
-                port:
-                  number: 5432  # Service Portnumber
+  entryPoints:
+    - retrom-pgdb
+  routes:
+    - match: HostSNI(`*`)
+      services:
+        - name: retrom-pgdb
+          port: 5432
