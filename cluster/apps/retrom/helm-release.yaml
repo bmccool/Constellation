@@ -1,0 +1,87 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: retrom
+  namespace: retrom-ns
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      # -- Version of the app-template helm chart
+      # this example is not automatically updated, so be sure to use the latest chart version
+      version: 2.2.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-helm-charts
+        namespace: flux-system
+
+  values:
+
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: ghcr.io/jmberesford/retrom-service
+              tag: latest
+              pullPolicy: IfNotPresent
+      pgdb:
+        containers:
+          main:
+            image:
+              repository: postgres
+              tag: 16
+              pullPolicy: IfNotPresent
+
+
+    strategy:
+      type: Recreate
+
+    # -- environment variables.
+    env:
+      TZ: "America/New York"
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: q2w3e4r5Q@W#E$R%
+      POSTGRES_DB: retrom
+
+    # -- Configures service settings for the chart.
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 3000
+      second:
+        controller: main
+        ports:
+          http:
+            port: 5101
+
+
+    # -- Configure persistence settings for the chart under this key.
+    persistence:
+      config:
+        enabled: true
+        existingClaim: retrom-pvc
+        advancedMounts:
+          main:
+            main:
+              - path: /config
+      data:
+        enabled: true
+        existingClaim: retrom-pgdb-pvc
+        advancedMounts:
+          pgdb:
+            main:
+              - path: /var/lib/postgresql/data
+      games:
+        type: nfs
+        server: NFS.brendonmccool.com
+        path: /k8s/influxdb/capricorn
+        advancedMounts:
+          main:
+            main:
+              - path: /games

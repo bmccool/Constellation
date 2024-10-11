@@ -24,6 +24,7 @@ resources:
   - radarr-transmission
   - readarr
   - readarr-transmission
+  - retrom
   - sonarr
   - sonarr-transmission
   - unmanic
