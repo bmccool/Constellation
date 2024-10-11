@@ -32,3 +32,23 @@ spec:
   # - hosts:
   #   - your-hostname.com  # Your hostname
   #   secretName: your-secret  # Your TLS Secret
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: retrom-pgdb-ingress
+  namespace: retrom-ns
+  annotations:
+spec:
+  rules:
+    - host: "retrom-pgdb.capricorn.brendonmccool.com"  # Your hostname
+      http:
+        paths:
+        # Path-based routing settings:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: retrom-pgdb  # The name of the service
+                port:
+                  number: 5432  # Service Portnumber

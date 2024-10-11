@@ -58,6 +58,11 @@ spec:
         ports:
           http:
             port: 5101
+      pgdb:
+        controller: pgdb
+        ports:
+          http:
+            port: 5432
 
 
     # -- Configure persistence settings for the chart under this key.
