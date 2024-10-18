@@ -62,4 +62,4 @@ spec:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: k8s/torrents-taurus/done/sonarr
+        path: /k8s/torrents-taurus/done/sonarr
