@@ -40,7 +40,7 @@ spec:
             env:
               TZ: "America/New York"
               POSTGRES_USER: pguser
-              POSTGRES_PASSWORD: q2w3e4r5Q@W#E$R%
+              POSTGRES_PASSWORD: sdfwer234
               POSTGRES_DB: retrom
 
     strategy:
