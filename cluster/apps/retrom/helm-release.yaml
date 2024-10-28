@@ -55,9 +55,13 @@ spec:
             port: 3000
       second:
         controller: main
+        type: NodePort
         ports:
           http:
             port: 5101
+            targetPort: 5101
+            protocol: TCP
+            nodePort: 5101
       pgdb:
         controller: pgdb
         type: NodePort
