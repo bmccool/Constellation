@@ -96,4 +96,4 @@ spec:
         advancedMounts:
           main:
             main:
-              - path: /app/snes
+              - path: /Library/SNES
