@@ -92,8 +92,8 @@ spec:
       games:
         type: nfs
         server: NFS.brendonmccool.com
-        path: /games
+        path: "/games/Systems/Super Nintendo Entertainment System/roms"
         advancedMounts:
           main:
             main:
-              - path: /app/games
+              - path: /app/snes
