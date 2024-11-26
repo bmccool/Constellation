@@ -2,8 +2,8 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: calibre-web
-  namespace: calibre-web-ns
+  name: calibre-web-automated
+  namespace: calibre
 spec:
   interval: 15m
   chart:
