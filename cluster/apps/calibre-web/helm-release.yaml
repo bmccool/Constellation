@@ -29,7 +29,7 @@ spec:
               tag: latest
               pullPolicy: IfNotPresent
             env:
-              TZ: "America/New York"
+              TZ: "America/Indianapolis"
               PUID: 1000
               PGID: 100
               DOCKER_MODS: lscr.io/linuxserver/mods:universal-calibre-v7.16.0
@@ -54,7 +54,7 @@ spec:
       books:
         type: nfs
         server: NFS.brendonmccool.com
-        path: /k8s/calibre-taurus
+        path: /k8s/calibre-capricorn
         globalMounts:
           - path: /calibre-library
       ingest:
