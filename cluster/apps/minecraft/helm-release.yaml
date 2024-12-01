@@ -14,7 +14,7 @@ spec:
       chart: minecraft
       # -- Version of the app-template helm chart
       # this example is not automatically updated, so be sure to use the latest chart version
-      version: 4.4.0
+      version: 4.23.2
       interval: 15m
       sourceRef:
         kind: HelmRepository
