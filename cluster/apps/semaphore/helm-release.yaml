@@ -25,7 +25,7 @@ spec:
         containers:
           main:
             image:
-              repository: semaphoreui/semaphore
+              repository: public.ecr.aws/semaphore/pro/server
               tag: latest
               pullPolicy: IfNotPresent
             env:
