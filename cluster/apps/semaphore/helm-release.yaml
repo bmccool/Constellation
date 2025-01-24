@@ -32,7 +32,7 @@ spec:
               SEMAPHORE_DB_USER: semaphore
               SEMAPHORE_DB_PASS: semaphore
               SEMAPHORE_DB_HOST: semaphore-pgdb
-              SEMAPHORE_DB_PORT: 5432
+              SEMAPHORE_DB_PORT: 5433
               SEMAPHORE_DB_DIALECT: postgres
               SEMAPHORE_DB: semaphore
               SEMAPHORE_PLAYBOOK_PATH: /tmp/semaphore/
@@ -81,7 +81,7 @@ spec:
             port: 5432
             targetPort: 5432
             protocol: TCP
-            nodePort: 5432
+            nodePort: 5433
 
 
     # -- Configure persistence settings for the chart under this key.

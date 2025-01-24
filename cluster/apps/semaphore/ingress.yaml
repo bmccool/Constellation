@@ -27,4 +27,4 @@ spec:
     - match: HostSNI(`*`)
       services:
         - name: semaphore-pgdb
-          port: 5432
+          port: 5433
