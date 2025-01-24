@@ -32,7 +32,7 @@ spec:
               SEMAPHORE_DB_USER: semaphore
               SEMAPHORE_DB_PASS: semaphore
               SEMAPHORE_DB_HOST: semaphore-pgdb
-              SEMAPHORE_DB_PORT: 5433
+              SEMAPHORE_DB_PORT: 5432
               SEMAPHORE_DB_DIALECT: postgres
               SEMAPHORE_DB: semaphore
               SEMAPHORE_PLAYBOOK_PATH: /tmp/semaphore/
