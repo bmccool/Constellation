@@ -29,6 +29,7 @@ spec:
               tag: latest
               pullPolicy: IfNotPresent
             env:
+              SEMAPHORE_PORT: 3000
               SEMAPHORE_DB_USER: semaphore
               SEMAPHORE_DB_PASS: semaphore
               SEMAPHORE_DB_HOST: semaphore-pgdb
@@ -81,7 +82,7 @@ spec:
             port: 5432
             targetPort: 5432
             protocol: TCP
-            nodePort: 5433
+            nodePort: 5433 # Changed the node port because there was a conflict with retrom, but ONLY here and in ingress.  Semaphore still targets 5432.
 
 
     # -- Configure persistence settings for the chart under this key.
