@@ -36,7 +36,7 @@ spec:
               SEMAPHORE_DB_PORT: 5432
               SEMAPHORE_DB_DIALECT: postgres
               SEMAPHORE_DB: semaphore
-              SEMAPHORE_PLAYBOOK_PATH: /tmp/semaphore/
+              SEMAPHORE_PLAYBOOK_PATH: /etc/semaphore/playbooks
               SEMAPHORE_ADMIN_PASSWORD: sdfwer234
               SEMAPHORE_ADMIN_NAME: admin
               SEMAPHORE_ADMIN_EMAIL: brendonmccool@gmail.com
@@ -87,13 +87,13 @@ spec:
 
     # -- Configure persistence settings for the chart under this key.
     persistence:
-      #config:
-      #  enabled: true
-      #  existingClaim: semaphore-pvc
-      #  advancedMounts:
-      #    main:
-      #      main:
-      #        - path: /config
+      config:
+        enabled: true
+        existingClaim: semaphore-pvc
+        advancedMounts:
+          main:
+            main:
+              - path: /etc/semaphore
       data:
         enabled: true
         existingClaim: semaphore-pgdb-pvc
