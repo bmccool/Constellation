@@ -34,3 +34,4 @@ resources:
   - semaphore
   - servarr
   - sheetable
+  - strava-statistics

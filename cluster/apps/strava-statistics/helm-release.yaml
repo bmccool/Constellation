@@ -1,0 +1,122 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: strava
+  namespace: strava-ns
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      # -- Version of the app-template helm chart
+      # this example is not automatically updated, so be sure to use the latest chart version
+      version: 2.2.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-helm-charts
+        namespace: flux-system
+
+  values:
+
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: robiningelbrecht/strava-statistics
+              tag: latest
+              pullPolicy: IfNotPresent
+            env:
+              # The URL on which the app will be hosted. This URL will be used in the manifest file.
+              # This will allow you to install the web app as a native app on your device.
+              # {"token_type":"Bearer","expires_at":1742171643,"expires_in":21600,"refresh_token":"4f57f222abfceed3a7d15e644d67d48cf81f74f3","access_token":"326b58546e6301fd8cb798c607c9f5a675775a45","athlete":{"id":32622702,"username":null,"resource_state":2,"firstname":"Brendon","lastname":"McCool","bio":"","city":"Fort Wayne","state":"Indiana","country":"United States","sex":"M","premium":false,"summit":false,"created_at":"2018-07-11T16:31:01Z","updated_at":"2024-09-24T13:26:46Z","badge_type_id":0,"weight":70.307,"profile_medium":"https://dgalywyr863hv.cloudfront.net/pictures/athletes/32622702/9741712/1/medium.jpg","profile":"https://dgalywyr863hv.cloudfront.net/pictures/athletes/32622702/9741712/1/large.jpg","friend":null,"follower":null}}
+              MANIFEST_APP_URL: http://strava-statistics.capricorn.brendonmccool.com/
+              # The client id of your Strava app.
+              STRAVA_CLIENT_ID: 121182
+              # The client secret of your Strava app.
+              STRAVA_CLIENT_SECRET: 05a371eea40278cf094e947769a505005f3a4480
+              # The refresh of your Strava app.
+              STRAVA_REFRESH_TOKEN: 4f57f222abfceed3a7d15e644d67d48cf81f74f3
+              # Strava API has rate limits (https://github.com/robiningelbrecht/strava-statistics/wiki),
+              # to make sure we don't hit the rate limit, we want to cap the number of new activities processed
+              # per import. Considering there's a 1000 request per day limit and importing one new activity can
+              # take up to 3 API calls, 250 should be a safe number.
+              NUMBER_OF_NEW_ACTIVITIES_TO_PROCESS_PER_IMPORT: 250
+              # The schedule to periodically run the import and HTML builds. Leave empty to disable periodic imports.
+              # The default schedule runs once a day at 04:05. If you do not know what cron expressions are, please leave this unchanged
+              # Make sure you don't run the imports too much to avoid hitting the Strava API rate limit. Once a day should be enough.
+              IMPORT_AND_BUILD_SCHEDULE: "5 4 * * *"
+              # Set the timezone used for the schedule
+              # Valid timezones can found under TZ Identifier column here: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List
+              TZ: "America/New York"
+
+              # Allowed options: en_US, fr_FR, nl_BE or zh_CN
+              LOCALE: en_US
+              # Allowed options: metric or imperial
+              UNIT_SYSTEM: imperial
+              # Time format to use when rendering the app
+              # Allowed formats: 24 or 12 (includes AM and PM)
+              TIME_FORMAT: 12
+              # Date format to use when rendering the app
+              # Allowed formats: DAY-MONTH-YEAR or MONTH-DAY-YEAR
+              DATE_FORMAT: MONTH-DAY-YEAR
+              # Sport types to import. Leave empty to import all sport types
+              # With this list you can also decide the order the sport types will be rendered in.
+              # A full list of allowed options is available on https://github.com/robiningelbrecht/strava-statistics/wiki/Supported-sport-types/
+              SPORT_TYPES_TO_IMPORT: '[]'
+              # Your birthday. Needed to calculate heart rate zones.
+              ATHLETE_BIRTHDAY: YYYY-MM-DD
+              # Optional, history of weight (in kg or pounds, depending on UNIT_SYSTEM). Needed to calculate relative w/kg.
+              # Check https://github.com/robiningelbrecht/strava-statistics/wiki for more info.
+              #ATHLETE_WEIGHTS='{
+              #    "2024-10-03": 74.6,
+              #    "2025-01-10": 70.3
+              #}'
+              ATHLETE_WEIGHTS: '[]'
+              # Optional, history of FTP. Needed to calculate activity stress level.
+              # Check https://github.com/robiningelbrecht/strava-statistics/wiki for more info. Example:
+              # FTP_VALUES='{
+              #    "2024-10-03": 198,
+              #    "2025-01-10": 220
+              #}'
+              FTP_VALUES: '[]'
+              # Optional, a link to your profile picture. Will be used to display in the nav bar and link to your Strava profile.
+              # Leave empty to disable this feature.
+              PROFILE_PICTURE_URL: ''
+              # Optional, full URL with ntfy topic included. This topic will be used to notify you when a new HTML build has run.
+              # Leave empty to disable notifications.
+              NTFY_URL: ''
+              # An array of activity ids to skip during import.
+              # This allows you to skip specific activities during import.
+              ACTIVITIES_TO_SKIP_DURING_IMPORT: '[]'
+
+    strategy:
+      type: Recreate
+
+    # -- Configures service settings for the chart.
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 8080
+
+
+    # -- Configure persistence settings for the chart under this key.
+    persistence:
+      storage:
+        enabled: true
+        existingClaim: ss-storage-brendon-pvc
+        advancedMounts:
+          main:
+            main:
+              - path: /var/www/storage
+      build:
+        enabled: true
+        existingClaim: ss-build-brendon-pvc
+        advancedMounts:
+          main:
+            main:
+              - path: /var/www/build
