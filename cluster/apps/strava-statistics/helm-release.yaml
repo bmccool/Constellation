@@ -32,7 +32,7 @@ spec:
               # The URL on which the app will be hosted. This URL will be used in the manifest file.
               # This will allow you to install the web app as a native app on your device.
               # {"token_type":"Bearer","expires_at":1742171643,"expires_in":21600,"refresh_token":"4f57f222abfceed3a7d15e644d67d48cf81f74f3","access_token":"326b58546e6301fd8cb798c607c9f5a675775a45","athlete":{"id":32622702,"username":null,"resource_state":2,"firstname":"Brendon","lastname":"McCool","bio":"","city":"Fort Wayne","state":"Indiana","country":"United States","sex":"M","premium":false,"summit":false,"created_at":"2018-07-11T16:31:01Z","updated_at":"2024-09-24T13:26:46Z","badge_type_id":0,"weight":70.307,"profile_medium":"https://dgalywyr863hv.cloudfront.net/pictures/athletes/32622702/9741712/1/medium.jpg","profile":"https://dgalywyr863hv.cloudfront.net/pictures/athletes/32622702/9741712/1/large.jpg","friend":null,"follower":null}}
-              MANIFEST_APP_URL: http://strava-statistics.capricorn.brendonmccool.com/
+              MANIFEST_APP_URL: http://strava-stats.capricorn.brendonmccool.com/
               # The client id of your Strava app.
               STRAVA_CLIENT_ID: 121182
               # The client secret of your Strava app.
@@ -67,7 +67,7 @@ spec:
               # A full list of allowed options is available on https://github.com/robiningelbrecht/strava-statistics/wiki/Supported-sport-types/
               SPORT_TYPES_TO_IMPORT: '[]'
               # Your birthday. Needed to calculate heart rate zones.
-              ATHLETE_BIRTHDAY: YYYY-MM-DD
+              ATHLETE_BIRTHDAY: 1989-09-27
               # Optional, history of weight (in kg or pounds, depending on UNIT_SYSTEM). Needed to calculate relative w/kg.
               # Check https://github.com/robiningelbrecht/strava-statistics/wiki for more info.
               #ATHLETE_WEIGHTS='{
