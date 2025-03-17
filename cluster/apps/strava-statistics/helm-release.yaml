@@ -70,9 +70,7 @@ spec:
               ATHLETE_BIRTHDAY: 1989-09-27
               # Optional, history of weight (in kg or pounds, depending on UNIT_SYSTEM). Needed to calculate relative w/kg.
               # Check https://github.com/robiningelbrecht/strava-statistics/wiki for more info.
-              ATHLETE_WEIGHTS:
-                2010-01-01: 160
-                2020-01-01: 155
+              ATHLETE_WEIGHTS: '{"1970-01-01": 155}'
               #ATHLETE_WEIGHTS: '[]'
               # Optional, history of FTP. Needed to calculate activity stress level.
               # Check https://github.com/robiningelbrecht/strava-statistics/wiki for more info. Example:
