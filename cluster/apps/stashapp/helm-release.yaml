@@ -59,7 +59,7 @@ spec:
       config:
         type: nfs
         server: NFS.brendonmccool.com
-        path: /brendon/stash/config
+        path: /brendon/stash/confi
         globalMounts:
           - path: /root/.stash
       metadata:
