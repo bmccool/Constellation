@@ -26,7 +26,7 @@ spec:
           main:
             image:
               repository: stashapp/stash
-              tag: v0.28.0
+              tag: latest
               pullPolicy: IfNotPresent
             env:
               STASH_STASH: /data/
@@ -56,12 +56,13 @@ spec:
         path: /brendon/stash/data
         globalMounts:
           - path: /data
-      confs:
-        type: nfs
-        server: NFS.brendonmccool.com
-        path: /brendon/stash/config
-        globalMounts:
-          - path: /root/.stash
+      configs:
+        enabled: true
+        existingClaim: stash-config-pvc
+        advancedMounts:
+          main:
+            main:
+              - path: /root/.stash
       metadata:
         enabled: true
         existingClaim: stash-pvc
