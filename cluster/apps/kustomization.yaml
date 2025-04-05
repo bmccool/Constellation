@@ -27,6 +27,7 @@ resources:
   - retrom
   - sonarr
   - sonarr-transmission
+  - stashapp
   - unmanic
   - unpackerr
   - uptime-kuma
