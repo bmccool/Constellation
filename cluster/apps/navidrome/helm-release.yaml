@@ -52,3 +52,9 @@ spec:
           main:
             main:
               - path: /data
+      music:
+        type: nfs
+        server: NFS.brendonmccool.com
+        path: /media/music
+        globalMounts:
+          - path: /music
