@@ -25,7 +25,7 @@ spec:
           main:
             image:
               repository: golift/unpackerr
-              tag: 0.14
+              tag: 0.14.4
               pullPolicy: IfNotPresent
             # -- environment variables.
             env:
