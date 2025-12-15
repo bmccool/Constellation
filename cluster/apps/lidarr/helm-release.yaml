@@ -72,6 +72,6 @@ spec:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /k8s/torrents-taurus/lidarr/downloads/complete
+        path: /downloads/lidarr/downloads/complete
         globalMounts:
           - path: /downloads

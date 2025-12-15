@@ -52,9 +52,9 @@ spec:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /mnt/k8s/torrents-taurus/lidarr/watch
+        path: /downloads/lidarr/watch
       downloads:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /mnt/k8s/torrents-taurus/lidarr/downloads
+        path: /downloads/lidarr/downloads

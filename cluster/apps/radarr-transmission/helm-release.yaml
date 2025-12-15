@@ -52,9 +52,9 @@ spec:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /mnt/k8s/torrents-taurus/radarr/watch
+        path: /downloads/radarr/watch
       downloads:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /mnt/k8s/torrents-taurus/radarr/downloads
+        path: /downloads/radarr/downloads

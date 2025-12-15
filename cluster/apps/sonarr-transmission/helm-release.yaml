@@ -52,14 +52,14 @@ spec:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /k8s/torrents-taurus/watch/sonarr
+        path: /downloads/watch/sonarr
       incoming:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /k8s/torrents-taurus/incoming/sonarr
+        path: /downloads/incoming/sonarr
       done:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /k8s/torrents-taurus/done/sonarr
+        path: /downloads/done/sonarr

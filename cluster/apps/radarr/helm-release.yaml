@@ -69,7 +69,7 @@ spec:
       downloads:
         type: nfs
         server: NFS.brendonmccool.com
-        path: /k8s/torrents-taurus/radarr/downloads
+        path: /downloads/radarr/downloads
         globalMounts:
           - path: /downloads
       movies:

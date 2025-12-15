@@ -48,4 +48,4 @@ spec:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /mnt/k8s/torrents-taurus/done/readarr
+        path: /downloads/done/readarr

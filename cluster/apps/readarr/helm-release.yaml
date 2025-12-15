@@ -70,6 +70,6 @@ spec:
         type: nfs
         enabled: true
         server: NFS.brendonmccool.com
-        path: /k8s/torrents-taurus/done/readarr
+        path: /downloads/done/readarr
         globalMounts:
           - path: /done

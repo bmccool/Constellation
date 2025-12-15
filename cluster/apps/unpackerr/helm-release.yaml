@@ -64,20 +64,20 @@ spec:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /k8s/torrents-taurus/radarr/downloads/complete
+        path: /downloads/radarr/downloads/complete
         globalMounts:
           - path: /radarr-0-downloads
       sonarr-0-downloads:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /k8s/torrents-taurus/done/sonarr
+        path: /downloads/done/sonarr
         globalMounts:
           - path: /sonarr-0-downloads
       lidarr-0-downloads:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /k8s/torrents-taurus/lidarr/downloads/complete
+        path: /downloads/lidarr/downloads/complete
         globalMounts:
           - path: /lidarr-0-downloads
