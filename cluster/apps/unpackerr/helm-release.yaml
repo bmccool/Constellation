@@ -62,25 +62,25 @@ spec:
             port: 9091
 
     # -- Configure persistence settings for the chart under this key.
-    persistence:
-      radarr-0-downloads:
-        enabled: true
-        type: nfs
-        server: NFS.brendonmccool.com
-        path: /downloads/radarr/downloads/complete
-        globalMounts:
-          - path: /radarr-0-downloads
-      sonarr-0-downloads:
-        enabled: true
-        type: nfs
-        server: NFS.brendonmccool.com
-        path: /downloads/done/sonarr
-        globalMounts:
-          - path: /sonarr-0-downloads
-      lidarr-0-downloads:
-        enabled: true
-        type: nfs
-        server: NFS.brendonmccool.com
-        path: /downloads/lidarr/downloads/complete
-        globalMounts:
-          - path: /lidarr-0-downloads
+    #persistence:
+    #  radarr-0-downloads:
+    #    enabled: true
+    #    type: nfs
+    #    server: NFS.brendonmccool.com
+    #    path: /downloads/radarr/downloads/complete
+    #    globalMounts:
+    #      - path: /radarr-0-downloads
+    #  sonarr-0-downloads:
+    #    enabled: true
+    #    type: nfs
+    #    server: NFS.brendonmccool.com
+    #    path: /downloads/done/sonarr
+    #    globalMounts:
+    #      - path: /sonarr-0-downloads
+    #  lidarr-0-downloads:
+    #    enabled: true
+    #    type: nfs
+    #    server: NFS.brendonmccool.com
+    #    path: /downloads/lidarr/downloads/complete
+    #    globalMounts:
+    #      - path: /lidarr-0-downloads
