@@ -19,10 +19,14 @@ spec:
         namespace: flux-system
 
   values:
-    image:
-      repository: golift/unpackerr
-      pullPolicy: IfNotPresent
-      tag: "0"
+    controllers:
+      main:
+        containers:
+          main:
+            image:
+              repository: golift/unpackerr
+              tag: 4.0.11
+              pullPolicy: IfNotPresent
 
     strategy:
       type: Recreate
