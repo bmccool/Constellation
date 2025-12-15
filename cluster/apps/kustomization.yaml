@@ -30,7 +30,7 @@ resources:
   - sonarr-transmission
   - stashapp
   - unmanic
-  #- unpackerr
+  - unpackerr
   - uptime-kuma
   #- networking
   - semaphore
