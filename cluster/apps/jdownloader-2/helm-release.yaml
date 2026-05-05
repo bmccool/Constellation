@@ -22,7 +22,7 @@ spec:
     image:
       repository: jlesage/jdownloader-2
       pullPolicy: IfNotPresent
-      tag: v23.06.1
+      tag: v26.03.1
 
     strategy:
       type: Recreate
