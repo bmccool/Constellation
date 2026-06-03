@@ -74,7 +74,7 @@ spec:
         enabled: true
         type: nfs
         server: NFS.brendonmccool.com
-        path: /downloads/done/sonarr
+        path: /downloads/done/sonarr/tv-sonarr
         globalMounts:
           - path: /sonarr-0-downloads
       lidarr-0-downloads:
