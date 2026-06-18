@@ -1,0 +1,19 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: loki-ingress
+  namespace: monitoring
+spec:
+  rules:
+    - host: "loki.capricorn.brendonmccool.com"  # Your hostname
+      http:
+        paths:
+          # Path-based routing settings:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: loki-gateway  # The name of the service
+                port:
+                  number: 80  # Service Portnumber

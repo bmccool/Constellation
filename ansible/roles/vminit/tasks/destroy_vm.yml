@@ -1,0 +1,17 @@
+---
+#destroy_vm.yml
+- name: Get VMID for {{ item }}
+  ansible.builtin.shell: "sudo /usr/sbin/qm list | grep {{ item }} | awk '{ print $1 }'"
+  register: vmid_result
+
+- name: Get Status for {{ item }}
+  ansible.builtin.shell: "sudo /usr/sbin/qm list | grep {{ item }} | awk '{ print $3 }'"
+  register: status_result
+
+- name: Stop VM {{ item }} if running
+  ansible.builtin.shell: "sudo /usr/sbin/qm stop {{ vmid_result.stdout }}"
+  when: status_result.stdout == "running"
+
+- name: Destroy VM {{ item }}
+  ansible.builtin.command: "sudo /usr/sbin/qm destroy {{ vmid_result.stdout }}"
+  when: vmid_result.stdout != ""

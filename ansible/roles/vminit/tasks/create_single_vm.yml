@@ -1,0 +1,13 @@
+---
+# create_single_vm.yml
+- name: Delete VM if already created
+  include_tasks: destroy_vm.yml
+
+- name: Clone VM from Cloud Image
+  include_tasks: clone_vm_from_cloud_image.yml
+
+- name: Expand VM
+  include_tasks: expand_vm.yml
+
+- name: Start VM
+  include_tasks: start_vm.yml

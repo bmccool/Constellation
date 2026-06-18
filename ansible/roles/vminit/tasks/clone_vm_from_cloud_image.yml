@@ -1,0 +1,8 @@
+---
+#clone_vm_from_cloud_image.yml
+- name: Get Next Available VM ID for {{ item }}
+  ansible.builtin.command: "sudo /usr/bin/pvesh get /cluster/nextid"
+  register: nextid_result
+
+- name: Clone VM {{ item }} From Ubuntu Cloud Image
+  ansible.builtin.command: "sudo /usr/sbin/qm clone {{ vmid }} {{ nextid_result.stdout }} --name {{ item }} --full"

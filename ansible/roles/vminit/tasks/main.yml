@@ -1,0 +1,17 @@
+---
+- name: Clone Controller VMs
+  include_tasks: create_single_vm.yml
+  vars:
+    disk_size_gb: "{{ controller.disk_size_gb }}"
+    mem_size_mb: "{{ controller.mem_size_mb }}"
+
+  loop:
+    "{{ controllers }}"
+
+- name: Clone Worker VMs
+  include_tasks: create_single_vm.yml
+  vars:
+    disk_size_gb: "{{ worker.disk_size_gb }}"
+    mem_size_mb: "{{ worker.mem_size_mb }}"
+  loop:
+    "{{ workers }}"

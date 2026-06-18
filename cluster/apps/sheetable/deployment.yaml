@@ -1,0 +1,45 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sheetable # Name of the deployment
+  namespace: sheetable-ns # Name of the namespace
+  labels:
+    app: sheetable # Name of your application
+spec:
+  selector:
+    matchLabels:
+      app: sheetable # Name of your application
+  replicas: 1 # Number of replicas
+  template:
+    metadata:
+      labels:
+        app: sheetable # Name of your application
+    spec:
+      containers:
+        # Containers are the individual pieces of your application that you want
+        # to run.
+        - name: sheetable # Name of the container
+          image: vallezw/sheetable # The image you want to run
+          # resources:
+          #   limits:
+          #     memory: 512Mi
+          #     cpu: "1"
+          #   requests:
+          #     memory: 256Mi
+          #     cpu: "0.2"
+          env:
+            - name: CONFIG_PATH
+              value: /app/config/
+          ports:
+            # Ports are the ports that your application uses.
+            - containerPort: 8080 # The port that your application uses
+          volumeMounts:
+            # VolumeMounts are the volumes that your application uses.
+            - mountPath: /app/config # The path that your application uses
+              name: sheetable-pv # Name of the volume
+      volumes:
+        # Volumes are the persistent storage that your application uses.
+        - name: sheetable-pv # Name of the volume
+          persistentVolumeClaim:
+            claimName: sheetable-config # Name of the persistent volume claim

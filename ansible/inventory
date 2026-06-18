@@ -1,0 +1,15 @@
+[controllers]
+capricorn-ctrl-[1:3]
+
+[maincontroller]
+capricorn-ctrl-1
+
+[secondarycontrollers]
+capricorn-ctrl-2
+capricorn-ctrl-3
+
+[workers]
+capricorn-work-[1:2]
+
+[proxmox]
+pve-capricorn

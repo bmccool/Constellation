@@ -1,0 +1,51 @@
+---
+cloud_init_id: 9000
+
+first-controller:
+  - capricorn-ctrl-1
+secondary-controllers:
+  - capricorn-ctrl-2
+  - capricorn-ctrl-3
+
+controllers:
+  - capricorn-ctrl-1
+  - capricorn-ctrl-2
+  - capricorn-ctrl-3
+workers:
+  - capricorn-work-1
+  - capricorn-work-2
+
+worker:
+  disk_size_gb:
+    64
+  mem_size_mb:
+    16384
+controller:
+  disk_size_gb:
+    8
+  mem_size_mb:
+    4096
+
+# OLD
+#cluster_name:
+  #/home/ansible/ha-test
+  #/home/ansible/taurusk8s/fleet-infra
+
+cluster_friendly_name: Capricorn
+cluster_path: /home/brendon/Constellation/cluster
+ciuser: capricorn
+cipassword: capricorn
+
+controlplane_endpoint_ipaddress: "10.208.100.19"
+# Also not referenced from this file, files/kube-vip.yaml and init_kubelet.yaml
+controlplane_endpoint_port: "6443"
+controlplane_endpoint: "10.208.100.19:6443"
+pod_network_cidr: 10.244.0.0/16
+
+nameserver: 10.208.100.1
+searchdomain: brendonmccool.com
+
+localuser: brendon
+
+#k8s_version: 1.25.5-00
+k8s_version: 1.24.3-00

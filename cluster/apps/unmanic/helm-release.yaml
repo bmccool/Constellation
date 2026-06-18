@@ -1,0 +1,58 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: unmanic
+  namespace: unmanic-ns
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      # -- Version of the app-template helm chart
+      # this example is not automatically updated, so be sure to use the latest chart version
+      version: 1.5.1
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-helm-charts
+        namespace: flux-system
+
+  values:
+    image:
+      repository: josh5/unmanic
+      pullPolicy: IfNotPresent
+      tag: 0.2.4
+
+    strategy:
+      type: Recreate
+
+    # -- environment variables.
+    env:
+      TZ: "America/New York"
+
+    # -- Configures service settings for the chart.
+    service:
+      main:
+        ports:
+          http:
+            port: 8888
+
+    # -- Configure persistence settings for the chart under this key.
+    persistence:
+      config:
+        enabled: true
+        mountPath: /config
+        existingClaim: unmanic-config-pvc
+      movies:
+        enabled: true
+        type: nfs
+        server: NFS.brendonmccool.com
+        path: /media/movies
+        mountPath: /media/movies
+      tv:
+        enabled: true
+        type: nfs
+        server: NFS.brendonmccool.com
+        path: /media/tv
+        mountPath: /media/tv

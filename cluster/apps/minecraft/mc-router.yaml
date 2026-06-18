@@ -89,7 +89,7 @@ metadata:
   name: mc-stable
   namespace: minecraft-ns
   annotations:
-    "mc-router.itzg.me/externalServerName": "minecraft.gemini.brendonmccool.com"
+    "mc-router.itzg.me/externalServerName": "minecraft.capricorn.brendonmccool.com"
 spec:
   ports:
     - port: 25565

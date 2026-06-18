@@ -7,7 +7,7 @@ metadata:
 spec:
   interval: 10m
   dependsOn:
-    - name: core
+    - name: infrastructure
   # Path to apps directory from flux directory TODO why two dots?
   path: ./cluster/apps
   prune: true

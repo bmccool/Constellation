@@ -1,0 +1,33 @@
+---
+#start_vm.yml
+  # TODO This is copied from destroy_vm.yml
+- name: Get VMID for {{ item }}
+  ansible.builtin.shell: "sudo /usr/sbin/qm list | grep {{ item }} | awk '{ print $1 }'"
+  register: vmid_result
+
+- name: Start VM {{ item }}
+  ansible.builtin.command: "sudo /usr/sbin/qm start {{ vmid_result.stdout }}"
+
+- name: Wait 60s for VM {{ item }} First Bootup
+  ansible.builtin.wait_for:
+    timeout: 60
+
+#- hosts: controllers:workers
+#  gather_facts: no
+#  become: yes
+#  #TODO dynamic
+#  remote_user: capricorn
+#  tasks:
+#      - name: Wait For New VMs
+#        ansible.builtin.wait_for_connection:
+#            timeout: 600
+#      - name: Done With VM Creation
+#        debug:
+#            msg: "Hooray!"
+
+- name: Reboot VM {{ item }} For Hostname Change
+  ansible.builtin.command: "sudo /usr/sbin/qm reboot {{ vmid_result.stdout }}"
+  register: result
+  until: result.rc == 0
+  retries: 3
+  delay: 10
