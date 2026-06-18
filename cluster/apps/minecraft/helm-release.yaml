@@ -104,3 +104,25 @@ spec:
         existingClaim: minecraft-pvc
         ## specify a subpath in the volume where the data is. Useful when sharing volumes with other apps.
         # subPath: /path/to/dataDir
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: minecraft-router
+  namespace: minecraft-ns
+spec:
+  interval: 15m
+  install:
+    remediation:
+      retries: 10
+  chart:
+    spec:
+      chart: mc-router
+      # -- Version of the app-template helm chart
+      # this example is not automatically updated, so be sure to use the latest chart version
+      version: 1.5.0
+      interval: 15m
+      sourceRef:
+        kind: HelmRepository
+        name: minecraft-server-charts
+        namespace: flux-system

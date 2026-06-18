@@ -4,8 +4,6 @@ kind: IngressRouteTCP
 metadata:
   name: servarr-ingress-tcp
   namespace: servarr-ns
-  #labels:
-  #  app: minecraft-minecraft
 
 spec:
   entryPoints:

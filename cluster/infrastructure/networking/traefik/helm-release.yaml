@@ -108,11 +108,11 @@ spec:
       - --certificatesresolvers.cloudflare.acme.storage=/ssl-certs/acme-cloudflare.json
 
     ports:
-      minecraft:
-        port: 25565
-        expose: true
-        exposedPort: 25565
-        protocol: TCP
+      #minecraft:
+      #  port: 25565
+      #  expose: true
+      #  exposedPort: 25565
+      #  protocol: TCP
       postgres:
         port: 5432
         expose: true
@@ -140,7 +140,7 @@ spec:
 
     ingressRoute:
       dashboard:
-        enabled: false
+        enabled: true
 
     # Set Traefik as your default Ingress Controller, according to Kubernetes 1.19+ changes.
     ingressClass:
